@@ -348,8 +348,8 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
           <div className="canvas-wrapper" style={{
             position: 'relative',
             width: '100%',
-            height: isMobile ? '35vh' : '52vh', // 70% level layout
-            aspectRatio: 'auto', // override 4/3 aspect ratio
+            height: isMobile ? 'auto' : '52vh', // auto height on mobile, 52vh on desktop
+            aspectRatio: isMobile ? '16/9' : 'auto', // 16:9 on mobile, auto on desktop
             backgroundColor: '#030303',
             border: '1px solid var(--border-color)',
             borderRadius: '8px',
