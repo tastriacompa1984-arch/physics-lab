@@ -57,6 +57,7 @@ export const SimulationContainer: React.FC<SimulationContainerProps> = ({
   // Sidebar controls
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [sidebarTab, setSidebarTab] = useState<'params' | 'theory' | 'quiz' | 'data'>('params');
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   // ChatGPT AI controls
   const [messages, setMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([
@@ -98,6 +99,16 @@ export const SimulationContainer: React.FC<SimulationContainerProps> = ({
   useEffect(() => {
     chatHistoryEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Handle mobile resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Handle single parameter change
   const handleParamChange = (key: string, value: number) => {
@@ -288,22 +299,22 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: isSidebarOpen ? '1fr 380px' : '1fr',
-      gap: '24px',
+      gridTemplateColumns: isMobile ? '1fr' : (isSidebarOpen ? '1fr 380px' : '1fr'),
+      gap: isMobile ? '16px' : '24px',
       maxWidth: '1600px',
       margin: '0 auto',
-      transition: 'grid-template-columns 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-      height: 'calc(100vh - 112px)', // height aligned to page
-      overflow: 'hidden'
+      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+      height: isMobile ? 'auto' : 'calc(100vh - 112px)',
+      overflow: isMobile ? 'visible' : 'hidden'
     }} className="simulation-container-layout">
       
       {/* Left Column: Visualizer + AI Chat console */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '20px',
-        height: '100%',
-        overflowY: 'auto',
+        gap: isMobile ? '16px' : '20px',
+        height: isMobile ? 'auto' : '100%',
+        overflowY: isMobile ? 'visible' : 'auto',
         paddingRight: '4px'
       }} className="visualizer-col">
         
@@ -337,7 +348,7 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
           <div className="canvas-wrapper" style={{
             position: 'relative',
             width: '100%',
-            height: '52vh', // 70% level layout
+            height: isMobile ? '35vh' : '52vh', // 70% level layout
             aspectRatio: 'auto', // override 4/3 aspect ratio
             backgroundColor: '#030303',
             border: '1px solid var(--border-color)',
@@ -572,11 +583,12 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
           padding: '16px',
           display: 'flex',
           flexDirection: 'column',
-          height: '100%',
+          height: isMobile ? 'auto' : '100%',
           background: 'rgba(10, 10, 12, 0.65)',
           border: '1px solid var(--border-color)',
           borderRadius: '12px',
-          overflowY: 'auto'
+          overflowY: isMobile ? 'visible' : 'auto',
+          minHeight: isMobile ? '400px' : 'auto'
         }}>
           {/* Notion style tabs header */}
           <div style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '16px', gap: '4px' }}>

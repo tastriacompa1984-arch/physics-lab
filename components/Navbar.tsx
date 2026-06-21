@@ -21,6 +21,8 @@ interface NavbarProps {
   // Custom navigation props added for the refactored SPA
   currentView: 'landing' | 'workbench' | 'ai-lab' | 'my-experiments' | 'about';
   onViewChange: (view: 'landing' | 'workbench' | 'ai-lab' | 'my-experiments' | 'about') => void;
+  isMobileCatalogOpen?: boolean;
+  onToggleMobileCatalog?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -36,7 +38,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleMobileMenu,
   onGoHome,
   currentView,
-  onViewChange
+  onViewChange,
+  isMobileCatalogOpen,
+  onToggleMobileCatalog
 }) => {
   const navItems = [
     { id: 'workbench', name: '实验库', icon: LayoutDashboard },
@@ -56,6 +60,17 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
+        
+        {currentView === 'workbench' && onToggleMobileCatalog && (
+          <button 
+            className="md:hidden flex items-center justify-center p-1.5 rounded-lg border border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:text-white"
+            onClick={onToggleMobileCatalog}
+            aria-label="Toggle Catalog"
+            title="实验目录"
+          >
+            <BookOpen size={18} className={isMobileCatalogOpen ? 'text-cyan-400' : ''} />
+          </button>
+        )}
         
         <div 
           onClick={() => onViewChange('landing')} 

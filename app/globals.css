@@ -557,6 +557,23 @@ input:checked + .slider-round:before {
 }
 
 @media (max-width: 768px) {
+  .main-layout {
+    height: auto !important;
+    overflow: visible !important;
+    min-height: calc(100vh - 64px);
+  }
+  
+  .content-area {
+    overflow-y: visible !important;
+    height: auto !important;
+    padding: 12px;
+  }
+
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
   .menu-toggle-btn {
     display: inline-flex;
   }

@@ -56,6 +56,7 @@ export default function Page() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isLightMode, setIsLightMode] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
@@ -1762,6 +1763,8 @@ export default function Page() {
           setCurrentView(view);
           setIsMobileMenuOpen(false);
         }}
+        isMobileCatalogOpen={isMobileCatalogOpen}
+        onToggleMobileCatalog={() => setIsMobileCatalogOpen(!isMobileCatalogOpen)}
       />
 
       {/* 主视图渲染 */}
@@ -1810,14 +1813,25 @@ export default function Page() {
             className="flex-1 flex flex-col"
           >
             <main className="main-layout flex-1">
+              {/* Sidebar Backdrop for Mobile */}
+              {isMobileCatalogOpen && (
+                <div 
+                  onClick={() => setIsMobileCatalogOpen(false)}
+                  className="fixed inset-0 top-16 bg-black/50 z-30 md:hidden"
+                />
+              )}
+
               {/* 左侧侧边栏 */}
               <Sidebar
                 grade={grade}
                 simulations={filteredSimulations}
                 selectedSimId={selectedSimId}
-                onSelectSim={handleSelectSim}
-                isOpen={isMobileMenuOpen}
-                onClose={() => setIsMobileMenuOpen(false)}
+                onSelectSim={(simId) => {
+                  handleSelectSim(simId);
+                  setIsMobileCatalogOpen(false); // Auto close catalog drawer on mobile selection
+                }}
+                isOpen={isMobileCatalogOpen}
+                onClose={() => setIsMobileCatalogOpen(false)}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
               />
