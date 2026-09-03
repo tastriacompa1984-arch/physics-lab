@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, Bot, User, Compass, HelpCircle, Loader2, ArrowRight, BookOpen, Clock, Trash2, Plus, Brain } from 'lucide-react';
+import { Send, Sparkles, Bot, User, Compass, HelpCircle, Loader2, ArrowRight, BookOpen, Clock, Trash2, Plus, Brain, Play } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
