@@ -63,7 +63,7 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#030307] text-slate-100 py-10 px-4 md:px-8 relative font-sans">
+    <div className="min-h-[calc(100vh-64px)] bg-[var(--bg-primary)] text-[var(--text-primary)] py-10 px-4 md:px-8 relative font-sans">
       {/* Glow blobs */}
       <div className="absolute top-[-10%] left-[-15%] w-[50vw] h-[50vw] rounded-full bg-purple-900/5 blur-[130px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-cyan-900/5 blur-[130px] pointer-events-none" />
@@ -81,10 +81,10 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
 
         {/* Saved Grid */}
         {savedExperiments.length === 0 ? (
-          <div className="py-20 text-center border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/10 backdrop-blur-sm flex flex-col items-center justify-center">
-            <ShieldAlert size={40} className="text-zinc-600 mb-3" />
-            <h3 className="text-sm font-semibold text-zinc-400">暂无存档实验</h3>
-            <p className="text-xs text-zinc-500 mt-1 max-w-xs">您可以在物理实验台中调整参数后，点击“保存预设”将其实时存入此空间。</p>
+          <div className="py-20 text-center border border-dashed border-[var(--border-color)] rounded-2xl bg-[var(--bg-tertiary)]/50 backdrop-blur-sm flex flex-col items-center justify-center">
+            <ShieldAlert size={40} className="text-[var(--text-muted)] mb-3" />
+            <h3 className="text-sm font-semibold text-[var(--text-secondary)]">暂无存档实验</h3>
+            <p className="text-xs text-[var(--text-muted)] mt-1 max-w-xs">您可以在物理实验台中调整参数后，点击“保存预设”将其实时存入此空间。</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -92,7 +92,7 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
               <div
                 key={exp.id}
                 onClick={() => onSelectSim(exp.simId)}
-                className="group p-5 rounded-2xl bg-zinc-900/25 border border-zinc-800/60 hover:border-zinc-700/80 backdrop-blur-md shadow-lg hover:shadow-cyan-500/2 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                className="group p-5 rounded-2xl bg-[var(--glass-bg)] border border-[var(--border-color)] hover:border-[var(--text-muted)] backdrop-blur-md shadow-lg hover:shadow-cyan-500/2 transition-all duration-300 flex flex-col justify-between cursor-pointer"
               >
                 <div>
                   {/* Top tags */}
@@ -104,51 +104,51 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
                     }`}>
                       {exp.subject === 'physics' ? '物理实验' : '化学实验'}
                     </span>
-                    <div className="flex items-center gap-1.5 text-zinc-500 text-[10px]">
+                    <div className="flex items-center gap-1.5 text-[var(--text-muted)] text-[10px]">
                       <Calendar size={11} />
                       {exp.savedAt}
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-sm md:text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
+                  <h3 className="text-sm md:text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
                     {exp.name}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-xs text-zinc-400 line-clamp-2 mt-2 leading-relaxed">
+                  <p className="text-xs text-[var(--text-secondary)] line-clamp-2 mt-2 leading-relaxed">
                     {exp.description}
                   </p>
 
                   {/* Parameters preview */}
-                  <div className="mt-4 p-3 bg-black/40 rounded-xl border border-zinc-800/40 flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-mono text-cyan-400/90">
+                  <div className="mt-4 p-3 bg-[var(--bg-tertiary)] rounded-xl border border-[var(--border-color)] flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-mono text-[var(--accent)]">
                     {Object.entries(exp.parameters).map(([key, val]) => (
                       <div key={key}>
-                        <span className="text-zinc-500">{key}:</span> {val}
+                        <span className="text-[var(--text-muted)]">{key}:</span> {val}
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Footer action buttons */}
-                <div className="flex justify-between items-center border-t border-zinc-800/60 pt-4 mt-5">
-                  <span className="text-xs text-zinc-500 flex items-center gap-1">
+                <div className="flex justify-between items-center border-t border-[var(--border-color)] pt-4 mt-5">
+                  <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
                     <Settings size={12} />
                     已存储动力学参数
                   </span>
                   <div className="flex gap-2">
                     <button
                       onClick={(e) => handleDelete(exp.id, e)}
-                      className="p-2 bg-zinc-900/60 hover:bg-red-950/20 border border-zinc-800 hover:border-red-900/30 text-zinc-400 hover:text-red-400 rounded-xl transition duration-200"
+                      className="p-2 bg-[var(--bg-tertiary)] hover:bg-red-950/20 border border-[var(--border-color)] hover:border-red-900/30 text-[var(--text-secondary)] hover:text-red-400 rounded-xl transition duration-200"
                       title="删除存档"
                     >
                       <Trash2 size={13} />
                     </button>
                     <button
                       onClick={() => onSelectSim(exp.simId)}
-                      className="flex items-center gap-1.5 py-1.5 px-3 bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 hover:border-cyan-400 text-xs text-cyan-300 hover:text-white rounded-xl transition duration-200"
+                      className="flex items-center gap-1.5 py-1.5 px-3 bg-gradient-to-tr from-[var(--accent-glow)] to-purple-500/10 border border-[var(--border-color)] hover:border-[var(--accent)] text-xs text-[var(--accent)] hover:text-[var(--text-primary)] rounded-xl transition duration-200"
                     >
-                      <Play size={11} className="fill-current text-cyan-400 group-hover:text-white" />
+                      <Play size={11} className="fill-current text-[var(--accent)] group-hover:text-white" />
                       运行仿真
                     </button>
                   </div>

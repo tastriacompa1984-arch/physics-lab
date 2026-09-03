@@ -15,7 +15,7 @@ export default function AssistantPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      content: `你好！我是 **LabAI 教学助手**。👋
+      content: `你好！我是 **智教智学 教学助手**。👋
 
 我可以帮您解答初中/高中的物理、化学以及数学问题，并通过有趣的物理现象与实验原理为您讲解。
 
@@ -112,7 +112,7 @@ export default function AssistantPage() {
             </div>
             <div>
               <span className="font-bold text-base tracking-wide bg-gradient-to-r from-white to-cyan-400 bg-clip-text text-transparent">
-                LabAI AI 教学助手
+                智教智学 AI 教学助手
               </span>
               <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-cyan-400 font-semibold font-mono">
                 DeepSeek v3

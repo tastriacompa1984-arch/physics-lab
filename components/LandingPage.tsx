@@ -46,7 +46,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   return (
     <motion.div 
-      className="relative w-full min-h-screen bg-[#030307] text-slate-100 flex flex-col justify-between overflow-x-hidden font-sans"
+      className="relative w-full min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col justify-between overflow-x-hidden font-sans"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.3 } }}
@@ -78,14 +78,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-none mb-6"
           >
             <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent filter drop-shadow-[0_0_20px_rgba(139,92,246,0.15)]">
-              LabAI —— AI数字仿真实验室
+              智教智学 —— AI数字仿真实验室
             </span>
           </motion.h1>
           
           {/* Subtitle */}
           <motion.p 
             variants={itemVariants}
-            className="text-sm md:text-lg text-slate-400 leading-relaxed max-w-2xl mb-10"
+            className="text-sm md:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-10"
           >
             输入题目，自动生成实验模型与实验过程。基于高精度三维 WebGL 算子，重塑启发式理化教育形态。
           </motion.p>
@@ -93,7 +93,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           {/* ChatGPT-style Prompter Input Box */}
           <motion.div 
             variants={itemVariants}
-            className="w-full max-w-2xl bg-zinc-900/60 border border-zinc-800 focus-within:border-cyan-500/50 rounded-2xl p-2.5 backdrop-blur-md focus-within:shadow-[0_0_30px_rgba(6,182,212,0.06)] transition-all duration-300 flex items-center relative"
+            className="w-full max-w-2xl bg-[var(--glass-bg)] border border-[var(--border-color)] focus-within:border-[var(--accent)]/50 rounded-2xl p-2.5 backdrop-blur-md focus-within:shadow-[0_0_30px_rgba(6,182,212,0.06)] transition-all duration-300 flex items-center relative"
           >
             <input
               type="text"
@@ -101,7 +101,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               value={promptInput}
               onChange={(e) => setPromptInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleGenerateSubmit()}
-              className="flex-1 bg-transparent pl-4 pr-12 py-2 text-xs md:text-sm text-slate-100 placeholder-zinc-500 outline-none"
+              className="flex-1 bg-transparent pl-4 pr-12 py-2 text-xs md:text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none"
             />
             <button
               onClick={handleGenerateSubmit}
@@ -120,7 +120,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <h2 className="text-xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
               选择科学探索工坊
             </h2>
-            <p className="text-xs md:text-sm text-slate-400 mt-2">
+            <p className="text-xs md:text-sm text-[var(--text-secondary)] mt-2">
               点击卡片即可启动预载高精度仿真实验台
             </p>
           </motion.div>
@@ -134,21 +134,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => onEnterGrade('junior', 'physics')}
               whileHover={{ scale: 1.02, y: -4, boxShadow: '0 20px 40px rgba(6, 182, 212, 0.08)' }}
               whileTap={{ scale: 0.98 }}
-              className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/30 backdrop-blur-md hover:border-cyan-500/40 cursor-pointer flex flex-col justify-between transition-all duration-300"
+              className="p-8 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-md hover:border-cyan-500/40 cursor-pointer flex flex-col justify-between transition-all duration-300"
             >
               <div>
                 <div className="w-12 h-12 rounded-xl bg-cyan-500/5 border border-cyan-500/10 flex items-center justify-center mb-6">
                   <Zap size={22} className="text-cyan-400" />
                 </div>
-                <h3 className="text-base md:text-lg font-bold text-white mb-2">
+                <h3 className="text-base md:text-lg font-bold text-[var(--text-primary)] mb-2">
                   初中物理工坊
                 </h3>
-                <p className="text-xs md:text-sm text-slate-400 leading-relaxed mb-6">
+                <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed mb-6">
                   直观化基础物理概念认知。包含光的折射、声波干涉、透镜成像、杠杆天平及欧姆定律。
                 </p>
                 <div className="flex flex-wrap gap-1.5 mb-8">
                   {['声音特征', '折射反射', '凸透镜成像', '杠杆平衡', '欧姆定律'].map(t => (
-                    <span key={t} className="text-[10px] text-zinc-500 bg-zinc-950 border border-zinc-900 px-2 py-0.5 rounded">
+                    <span key={t} className="text-[10px] text-[var(--text-muted)] bg-[var(--bg-tertiary)] border border-[var(--border-color)] px-2 py-0.5 rounded">
                       {t}
                     </span>
                   ))}
@@ -165,21 +165,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => onEnterGrade('senior', 'physics')}
               whileHover={{ scale: 1.02, y: -4, boxShadow: '0 20px 40px rgba(139, 92, 246, 0.08)' }}
               whileTap={{ scale: 0.98 }}
-              className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/30 backdrop-blur-md hover:border-purple-500/40 cursor-pointer flex flex-col justify-between transition-all duration-300"
+              className="p-8 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-md hover:border-purple-500/40 cursor-pointer flex flex-col justify-between transition-all duration-300"
             >
               <div>
                 <div className="w-12 h-12 rounded-xl bg-purple-500/5 border border-purple-500/10 flex items-center justify-center mb-6">
                   <Compass size={22} className="text-purple-400" />
                 </div>
-                <h3 className="text-base md:text-lg font-bold text-white mb-2">
+                <h3 className="text-base md:text-lg font-bold text-[var(--text-primary)] mb-2">
                   高中物理工坊
                 </h3>
-                <p className="text-xs md:text-sm text-slate-400 leading-relaxed mb-6">
+                <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed mb-6">
                   高阶物理解析与运动方程求解。提供抛体轨迹、机械能守恒、简谐振动与理想气体的深度拟真。
                 </p>
                 <div className="flex flex-wrap gap-1.5 mb-8">
                   {['平抛运动', '匀变速', '单摆能量', '力的合成', '双缝干涉'].map(t => (
-                    <span key={t} className="text-[10px] text-zinc-500 bg-zinc-950 border border-zinc-900 px-2 py-0.5 rounded">
+                    <span key={t} className="text-[10px] text-[var(--text-muted)] bg-[var(--bg-tertiary)] border border-[var(--border-color)] px-2 py-0.5 rounded">
                       {t}
                     </span>
                   ))}
@@ -196,21 +196,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => onEnterGrade('junior', 'chemistry')}
               whileHover={{ scale: 1.02, y: -4, boxShadow: '0 20px 40px rgba(236, 72, 153, 0.08)' }}
               whileTap={{ scale: 0.98 }}
-              className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/30 backdrop-blur-md hover:border-pink-500/40 cursor-pointer flex flex-col justify-between transition-all duration-300"
+              className="p-8 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-md hover:border-pink-500/40 cursor-pointer flex flex-col justify-between transition-all duration-300"
             >
               <div>
                 <div className="w-12 h-12 rounded-xl bg-pink-500/5 border border-pink-500/10 flex items-center justify-center mb-6">
                   <BookOpen size={22} className="text-pink-400" />
                 </div>
-                <h3 className="text-base md:text-lg font-bold text-white mb-2">
+                <h3 className="text-base md:text-lg font-bold text-[var(--text-primary)] mb-2">
                   化学动力学工坊
                 </h3>
-                <p className="text-xs md:text-sm text-slate-400 leading-relaxed mb-6">
+                <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed mb-6">
                   微观反应与宏观现象拟真。完全依照教材设计，呈现电解水实验、酸碱中和及气体剧烈氧化。
                 </p>
                 <div className="flex flex-wrap gap-1.5 mb-8">
                   {['电解水', '气体制备', '酸碱反应', '金属燃烧', '溶液配制'].map(t => (
-                    <span key={t} className="text-[10px] text-zinc-500 bg-zinc-950 border border-zinc-900 px-2 py-0.5 rounded">
+                    <span key={t} className="text-[10px] text-[var(--text-muted)] bg-[var(--bg-tertiary)] border border-[var(--border-color)] px-2 py-0.5 rounded">
                       {t}
                     </span>
                   ))}
@@ -226,38 +226,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         {/* Feature Grid Highlights */}
         <motion.div variants={itemVariants} className="w-full max-w-6xl mt-6">
-          <h3 className="text-center text-sm md:text-base font-bold text-zinc-400 mb-10 tracking-widest uppercase">
+          <h3 className="text-center text-sm md:text-base font-bold text-[var(--text-secondary)] mb-10 tracking-widest uppercase">
             科学动力学底层技术架构
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="p-6 rounded-2xl border border-zinc-900 bg-zinc-950/40 backdrop-blur-sm">
+            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
               <Zap size={20} className="text-cyan-400 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-white mb-1.5">高刷 WebGL 三维渲染</h4>
-              <p className="text-[11px] md:text-xs text-zinc-500 leading-relaxed">整合 GPU 渲染与双缓冲绘制，支持高拟真材质与流畅平滑的三维仿真画布。</p>
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">高刷 WebGL 三维渲染</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">整合 GPU 渲染与双缓冲绘制，支持高拟真材质与流畅平滑的三维仿真画布。</p>
             </div>
-            <div className="p-6 rounded-2xl border border-zinc-900 bg-zinc-950/40 backdrop-blur-sm">
+            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
               <Compass size={20} className="text-purple-400 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-white mb-1.5">高精度微分方程求解</h4>
-              <p className="text-[11px] md:text-xs text-zinc-500 leading-relaxed">使用龙格库塔(RK4)及 Verlet 运动积分器，保证运动形态契合经典物理规律。</p>
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">高精度微分方程求解</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">使用龙格库塔(RK4)及 Verlet 运动积分器，保证运动形态契合经典物理规律。</p>
             </div>
-            <div className="p-6 rounded-2xl border border-zinc-900 bg-zinc-950/40 backdrop-blur-sm">
+            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
               <Sparkles size={20} className="text-pink-400 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-white mb-1.5">AI 自然语言控制台</h4>
-              <p className="text-[11px] md:text-xs text-zinc-500 leading-relaxed">提供智能 AI 探索助手，支持一键式解析输入文本并自动构建三维仿真场景。</p>
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">AI 自然语言控制台</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">提供智能 AI 探索助手，支持一键式解析输入文本并自动构建三维仿真场景。</p>
             </div>
-            <div className="p-6 rounded-2xl border border-zinc-900 bg-zinc-950/40 backdrop-blur-sm">
+            <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
               <BarChart2 size={20} className="text-amber-500 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-white mb-1.5">数据记录仪与曲线绘制</h4>
-              <p className="text-[11px] md:text-xs text-zinc-500 leading-relaxed">实时打点捕获物理规律，支持折线图展示与 CSV 格式实验数据下载功能。</p>
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">数据记录仪与曲线绘制</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">实时打点捕获物理规律，支持折线图展示与 CSV 格式实验数据下载功能。</p>
             </div>
           </div>
         </motion.div>
       </motion.div>
 
       {/* Footer Info */}
-      <footer className="text-center py-8 px-6 border-t border-white/[0.04] bg-zinc-950/40 text-[10px] text-zinc-650 z-10 font-sans">
-        <p>Copyright © 2026 LabAI. All Rights Reserved. Created for Educational Visualizations.</p>
-        <p className="mt-1.5 text-zinc-700">基于 Next.js 15 + Tailwind CSS + Three.js 实时渲染架构</p>
+      <footer className="text-center py-8 px-6 border-t border-[var(--border-color)] bg-[var(--bg-secondary)] text-[10px] text-[var(--text-muted)] z-10 font-sans">
+        <p>Copyright © 2026 智教智学. All Rights Reserved. Created for Educational Visualizations.</p>
+        <p className="mt-1.5 text-[var(--text-muted)]">基于 Next.js 15 + Tailwind CSS + Three.js 实时渲染架构</p>
       </footer>
     </motion.div>
   );

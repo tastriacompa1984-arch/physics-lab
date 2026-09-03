@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     // System prompt setting
     const systemPrompt = {
       role: 'system',
-      content: `你是 LabAI 教学助手。你的职责是：
+      content: `你是 智教智学 教学助手。你的职责是：
 - 解答初中物理问题
 - 解答高中物理问题
 - 解答初中化学问题

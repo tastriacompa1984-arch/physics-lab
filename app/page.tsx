@@ -1691,6 +1691,7 @@ export default function Page() {
       setGrade(sim.grade);
       setSelectedSimId(id);
       setCurrentView('workbench');
+      setIsSidebarOpen(false); // Close sidebar on mobile catalog select
     }
   };
 
@@ -1727,17 +1728,17 @@ export default function Page() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-[#030307] text-neutral-100 flex flex-col items-center justify-center font-sans">
+      <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col items-center justify-center font-sans">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm text-neutral-400">正在加载实验室...</span>
+          <span className="text-sm text-[var(--text-secondary)]">正在加载实验室...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#030307] text-slate-100 flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col font-sans overflow-x-hidden transition-colors duration-200">
       {/* 顶部导航 */}
       <Navbar
         currentGrade={grade}
@@ -1757,6 +1758,7 @@ export default function Page() {
         onToggleTheme={toggleTheme}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={toggleMobileMenu}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         onGoHome={handleGoHome}
         currentView={currentView}
         onViewChange={(view) => {
@@ -1835,6 +1837,7 @@ export default function Page() {
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
               />
+
 
               {/* 内容展示区 */}
               <section className="content-area flex-1">

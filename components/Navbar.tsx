@@ -16,6 +16,7 @@ interface NavbarProps {
   onToggleTheme: () => void;
   isMobileMenuOpen: boolean;
   onToggleMobileMenu: () => void;
+  onToggleSidebar?: () => void;
   onGoHome: () => void;
   
   // Custom navigation props added for the refactored SPA
@@ -49,17 +50,33 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'about', name: '关于我们', icon: HelpCircle }
   ] as const;
 
+  const onToggleSidebarWrapper = () => {
+    if (onToggleSidebar) onToggleSidebar();
+  };
+
   return (
-    <header className="sticky top-0 z-50 h-16 w-full border-b border-white/[0.06] bg-zinc-950/70 backdrop-blur-md flex items-center justify-between px-6 transition duration-200">
+    <header className="sticky top-0 z-50 h-16 w-full border-b border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-md flex items-center justify-between px-6 transition duration-200">
       {/* Left: Logo & Mobile menu toggle */}
       <div className="flex items-center gap-4">
         <button 
-          className="md:hidden flex items-center justify-center p-1.5 rounded-lg border border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:text-white"
+          className="md:hidden flex items-center justify-center p-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
           onClick={onToggleMobileMenu}
           aria-label="Toggle Menu"
         >
           {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
+
+        {/* New: Catalog toggle for mobile when in workbench */}
+        {currentView === 'workbench' && (
+          <button 
+            className="md:hidden flex items-center justify-center p-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-tertiary)] text-[var(--accent)] hover:text-[var(--text-primary)]"
+            onClick={onToggleSidebarWrapper}
+            aria-label="Toggle Catalog"
+            title="展开实验目录"
+          >
+            <BookOpen size={18} />
+          </button>
+        )}
         
         {currentView === 'workbench' && onToggleMobileCatalog && (
           <button 
@@ -79,8 +96,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/10 group-hover:scale-105 transition duration-200">
             <Sparkles size={16} className="text-white fill-current animate-pulse" />
           </div>
-          <span className="text-lg font-black bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent tracking-tight">
-            LabAI
+          <span className="text-lg font-black bg-gradient-to-r from-[var(--text-primary)] via-slate-500 to-slate-600 bg-clip-text text-transparent tracking-tight">
+            智教智学
           </span>
         </div>
       </div>
@@ -89,13 +106,13 @@ export const Navbar: React.FC<NavbarProps> = ({
       {currentView === 'workbench' && (
         <div className="hidden lg:flex items-center gap-4">
           {/* Subject Switcher */}
-          <div className="flex p-0.5 bg-zinc-900/80 border border-zinc-850 rounded-lg">
+          <div className="flex p-0.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg">
             <button
               onClick={() => onSubjectChange('physics')}
               className={`px-3 py-1 text-xs font-bold rounded-md transition duration-200 ${
                 currentSubject === 'physics'
-                  ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border border-[var(--border-color)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               物理
@@ -104,8 +121,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onSubjectChange('chemistry')}
               className={`px-3 py-1 text-xs font-bold rounded-md transition duration-200 ${
                 currentSubject === 'chemistry'
-                  ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border border-[var(--border-color)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               化学
@@ -113,13 +130,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Grade Switcher */}
-          <div className="flex p-0.5 bg-zinc-900/80 border border-zinc-850 rounded-lg">
+          <div className="flex p-0.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg">
             <button
               onClick={() => onGradeChange('junior')}
               className={`px-3 py-1 text-xs font-bold rounded-md transition duration-200 ${
                 currentGrade === 'junior'
-                  ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border border-[var(--border-color)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               {currentSubject === 'physics' ? '初中' : '初中化学'}
@@ -129,8 +146,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onGradeChange('senior')}
                 className={`px-3 py-1 text-xs font-bold rounded-md transition duration-200 ${
                   currentGrade === 'senior'
-                    ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
-                    : 'text-zinc-400 hover:text-white'
+                    ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border border-[var(--border-color)]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 高中
@@ -140,13 +157,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Search bar inside header for workspace */}
           <div className="relative flex items-center">
-            <Search size={13} className="absolute left-3.5 text-zinc-500 pointer-events-none" />
+            <Search size={13} className="absolute left-3.5 text-[var(--text-muted)] pointer-events-none" />
             <input
               type="text"
               placeholder="搜索实验..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-9 pr-4 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900/40 text-xs text-white placeholder-zinc-500 focus:border-cyan-500/50 outline-none w-48 focus:w-60 transition-all duration-300"
+              className="pl-9 pr-4 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-tertiary)] text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-[var(--accent)]/50 outline-none w-48 focus:w-60 transition-all duration-300"
             />
           </div>
         </div>
@@ -164,24 +181,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.id}
                 onClick={() => onViewChange(item.id)}
                 className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition duration-200 ${
-                  isActive ? 'text-white' : 'text-zinc-400 hover:text-zinc-200'
+                  isActive ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeNavBg"
-                    className="absolute inset-0 bg-white/[0.04] border border-white/[0.05] rounded-lg -z-10"
+                    className="absolute inset-0 bg-[var(--accent-glow)] border border-[var(--border-color)] rounded-lg -z-10"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
-                <Icon size={13} className={isActive ? 'text-cyan-400' : 'text-zinc-400'} />
+                <Icon size={13} className={isActive ? 'text-[var(--accent)]' : 'text-[var(--text-secondary)]'} />
                 {item.name}
               </button>
             );
           })}
         </nav>
 
-        <div className="h-4 w-[1px] bg-zinc-800 hidden md:block" />
+        <div className="h-4 w-[1px] bg-[var(--border-color)] hidden md:block" />
 
         {/* Global actions */}
         <div className="flex items-center gap-3.5">
@@ -189,21 +206,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           {currentView !== 'workbench' && (
             <button
               onClick={() => onViewChange('workbench')}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-tr from-cyan-400/20 to-purple-500/20 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white shadow-lg shadow-cyan-500/2 active:scale-95 transition duration-200"
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-tr from-[var(--accent-glow)] to-purple-500/10 border border-[var(--border-color)] hover:border-[var(--accent)] text-[var(--accent)] hover:text-[var(--text-primary)] shadow-lg shadow-cyan-500/2 active:scale-95 transition duration-200"
             >
-              <Sparkles size={12} className="text-cyan-400 animate-bounce" style={{ animationDuration: '3s' }} />
+              <Sparkles size={12} className="text-[var(--accent)] animate-bounce" style={{ animationDuration: '3s' }} />
               进入实验台
             </button>
           )}
-
-          {/* Theme Switcher (Dark aesthetic maintained) */}
-          <button
-            onClick={onToggleTheme}
-            className="flex items-center justify-center w-8 h-8 rounded-lg border border-zinc-800 bg-zinc-900/40 text-zinc-400 hover:text-white hover:border-zinc-700 transition"
-            aria-label="Toggle Theme"
-          >
-            {isLightMode ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
         </div>
       </div>
 
@@ -225,18 +233,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.2 }}
-              className="fixed top-16 bottom-0 left-0 w-64 bg-zinc-950 border-r border-zinc-850 p-4 z-50 md:hidden flex flex-col justify-between"
+              className="fixed top-16 bottom-0 left-0 w-64 bg-[var(--bg-secondary)] border-r border-[var(--border-color)] p-4 z-50 md:hidden flex flex-col justify-between"
             >
               <div className="space-y-6">
                 {/* Subject & Grade for Mobile if in workbench */}
                 {currentView === 'workbench' && (
-                  <div className="space-y-3.5 pb-4 border-b border-zinc-850">
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase">实验台配置</span>
+                  <div className="space-y-3.5 pb-4 border-b border-[var(--border-color)]">
+                    <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase">实验台配置</span>
                     <div className="flex gap-2">
                       <button
                         onClick={() => onSubjectChange('physics')}
                         className={`flex-1 py-1.5 text-xs font-bold rounded-lg border text-center transition ${
-                          currentSubject === 'physics' ? 'bg-zinc-800 border-cyan-500/30 text-cyan-400' : 'bg-transparent border-zinc-800 text-zinc-400'
+                          currentSubject === 'physics' ? 'bg-[var(--bg-tertiary)] border-[var(--accent)]/30 text-[var(--accent)]' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)]'
                         }`}
                       >
                         物理
@@ -244,7 +252,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <button
                         onClick={() => onSubjectChange('chemistry')}
                         className={`flex-1 py-1.5 text-xs font-bold rounded-lg border text-center transition ${
-                          currentSubject === 'chemistry' ? 'bg-zinc-800 border-cyan-500/30 text-cyan-400' : 'bg-transparent border-zinc-800 text-zinc-400'
+                          currentSubject === 'chemistry' ? 'bg-[var(--bg-tertiary)] border-[var(--accent)]/30 text-[var(--accent)]' : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)]'
                         }`}
                       >
                         化学
@@ -255,7 +263,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {/* Nav list */}
                 <div className="space-y-1.5">
-                  <span className="text-[10px] font-bold text-zinc-500 uppercase px-2 mb-2 block">导航菜单</span>
+                  <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase px-2 mb-2 block">导航菜单</span>
                   {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = currentView === item.id;
@@ -267,10 +275,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onToggleMobileMenu();
                         }}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition ${
-                          isActive ? 'bg-zinc-900 border border-zinc-800 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900/30'
+                          isActive ? 'bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]/50'
                         }`}
                       >
-                        <Icon size={14} className={isActive ? 'text-cyan-400' : 'text-zinc-400'} />
+                        <Icon size={14} className={isActive ? 'text-[var(--accent)]' : 'text-[var(--text-secondary)]'} />
                         {item.name}
                       </button>
                     );
@@ -285,7 +293,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onViewChange('workbench');
                     onToggleMobileMenu();
                   }}
-                  className="w-full py-2.5 rounded-lg bg-gradient-to-tr from-cyan-400/20 to-purple-500/20 border border-cyan-500/30 text-cyan-300 font-bold text-xs"
+                  className="w-full py-2.5 rounded-lg bg-gradient-to-tr from-[var(--accent-glow)] to-purple-500/10 border border-[var(--border-color)] text-[var(--accent)] font-bold text-xs"
                 >
                   启动实验台
                 </button>

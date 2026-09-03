@@ -63,7 +63,7 @@ export default function AiLabView({
       role: 'assistant',
       content: `### 欢迎来到 AI 智能实验生成工坊！ ✨
 
-我是您的 **LabAI 科学探索助手**。您可以直接输入任何物理或化学命题，我将为您**自动构建动力学实验模型**并给出详细的物理原理剖析。
+我是您的 **智教智学 科学探索助手**。您可以直接输入任何物理或化学命题，我将为您**自动构建动力学实验模型**并给出详细的物理原理剖析。
 
 比如，您可以输入：
 * *“帮我设计一个单摆周期与重力加速度关系的物理模型”*
@@ -251,7 +251,7 @@ ${simId === 'simple-pendulum' ? `
         role: 'assistant',
         content: `### 欢迎来到 AI 智能实验生成工坊！ ✨
 
-我是您的 **LabAI 科学探索助手**。您可以直接输入任何物理或化学命题，我将为您**自动构建动力学实验模型**并给出详细的物理原理剖析。
+我是您的 **智教智学 科学探索助手**。您可以直接输入任何物理或化学命题，我将为您**自动构建动力学实验模型**并给出详细的物理原理剖析。
 
 比如，您可以输入：
 * *“帮我设计一个单摆周期与重力加速度关系的物理模型”*
@@ -367,15 +367,15 @@ ${simId === 'simple-pendulum' ? `
     }
 
     return (
-      <div className="w-full bg-zinc-950 border border-zinc-800/80 rounded-xl overflow-hidden shadow-2xl mt-4">
-        <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex justify-between items-center">
-          <span className="text-xs text-cyan-400 font-semibold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+      <div className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl overflow-hidden shadow-2xl mt-4">
+        <div className="px-4 py-2.5 bg-[var(--bg-tertiary)] border-b border-[var(--border-color)] flex justify-between items-center">
+          <span className="text-xs text-[var(--accent)] font-semibold flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
             实时 3D 动力学仿真器：{getSimulationName(simId)}
           </span>
           <button 
             onClick={() => onSelectSim(simId)}
-            className="text-[10px] text-zinc-400 hover:text-white px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 transition"
+            className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-0.5 rounded bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 transition"
           >
             打开独立实验台 →
           </button>
@@ -388,14 +388,14 @@ ${simId === 'simple-pendulum' ? `
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] flex bg-zinc-950 text-slate-100 overflow-hidden font-sans">
+    <div className="h-[calc(100vh-64px)] flex bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-hidden font-sans">
       {/* Left Sidebar - Chat History */}
-      <aside className="w-72 border-r border-zinc-800/60 bg-zinc-950 flex flex-col hidden md:flex">
+      <aside className="w-72 border-r border-[var(--border-color)] bg-[var(--bg-secondary)] flex flex-col hidden md:flex">
         {/* Header */}
-        <div className="p-4 border-b border-zinc-800/60 flex gap-2">
+        <div className="p-4 border-b border-[var(--border-color)] flex gap-2">
           <button 
             onClick={startNewChat}
-            className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-zinc-800 hover:border-zinc-700 bg-zinc-900/40 hover:bg-zinc-900 text-sm text-zinc-200 hover:text-white transition duration-200"
+            className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-[var(--border-color)] hover:border-[var(--border-color)] bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition duration-200"
           >
             <Plus size={16} />
             新建实验生成
@@ -404,9 +404,9 @@ ${simId === 'simple-pendulum' ? `
 
         {/* History List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-1.5 scrollbar-thin">
-          <h4 className="text-[10px] uppercase font-bold tracking-wider text-zinc-500 px-3 mb-2">历史生成记录</h4>
+          <h4 className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)] px-3 mb-2">历史生成记录</h4>
           {history.length === 0 ? (
-            <div className="text-xs text-zinc-600 px-3 py-4 text-center">暂无生成记录</div>
+            <div className="text-xs text-[var(--text-muted)] px-3 py-4 text-center">暂无生成记录</div>
           ) : (
             history.map((item) => (
               <div
@@ -414,20 +414,20 @@ ${simId === 'simple-pendulum' ? `
                 onClick={() => loadHistoryItem(item)}
                 className={`group flex items-center justify-between p-2.5 rounded-lg cursor-pointer transition duration-200 ${
                   activeHistoryId === item.id 
-                    ? 'bg-zinc-900 border border-zinc-800 text-white' 
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50'
+                    ? 'bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-primary)] font-semibold' 
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]/50'
                 }`}
               >
                 <div className="flex items-center gap-2.5 overflow-hidden font-sans">
-                  <Clock size={14} className="text-zinc-500 flex-shrink-0" />
+                  <Clock size={14} className="text-[var(--text-muted)] flex-shrink-0" />
                   <div className="flex flex-col overflow-hidden">
                     <span className="text-xs font-medium truncate">{item.title}</span>
-                    <span className="text-[10px] text-zinc-600">{item.timestamp}</span>
+                    <span className="text-[10px] text-[var(--text-muted)]">{item.timestamp}</span>
                   </div>
                 </div>
                 <button
                   onClick={(e) => deleteHistoryItem(item.id, e)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-zinc-800 rounded text-zinc-500 hover:text-red-400 transition"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[var(--bg-tertiary)] rounded text-[var(--text-muted)] hover:text-red-400 transition"
                 >
                   <Trash2 size={12} />
                 </button>
@@ -437,7 +437,7 @@ ${simId === 'simple-pendulum' ? `
         </div>
 
         {/* Footer info */}
-        <div className="p-4 border-t border-zinc-800/60 bg-zinc-950 flex items-center justify-between text-[11px] text-zinc-500">
+        <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-secondary)] flex items-center justify-between text-[11px] text-[var(--text-muted)]">
           <span className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             AI 模型引擎就绪
@@ -447,7 +447,7 @@ ${simId === 'simple-pendulum' ? `
       </aside>
 
       {/* Right Content Space - Chat Workspace */}
-      <main className="flex-1 flex flex-col h-full bg-[#050508] relative">
+      <main className="flex-1 flex flex-col h-full bg-[var(--bg-primary)] relative">
         {/* Background glow blobs */}
         <div className="absolute top-[-20%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-purple-900/5 blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[45vw] h-[45vw] rounded-full bg-cyan-900/5 blur-[120px] pointer-events-none" />
@@ -460,8 +460,8 @@ ${simId === 'simple-pendulum' ? `
                 key={msg.id}
                 className={`flex gap-4 p-4 rounded-xl border ${
                   msg.role === 'user'
-                    ? 'bg-cyan-955/10 border-cyan-500/10 shadow-[0_0_15px_rgba(6,182,212,0.02)]'
-                    : 'bg-zinc-900/25 border-zinc-800/40 backdrop-blur-sm'
+                    ? 'bg-[var(--accent-glow)] border-[var(--border-color)] shadow-[0_0_15px_rgba(6,182,212,0.02)]'
+                    : 'bg-[var(--glass-bg)] border-[var(--border-color)] backdrop-blur-sm'
                 }`}
               >
                 {/* Avatar */}
@@ -479,25 +479,25 @@ ${simId === 'simple-pendulum' ? `
 
                 {/* Content */}
                 <div className="flex-1 overflow-hidden">
-                  <div className="prose prose-invert prose-sm max-w-none text-slate-200">
+                  <div className="prose prose-invert prose-sm max-w-none text-[var(--text-primary)]">
                     <ReactMarkdown
                       remarkPlugins={[remarkMath]}
                       rehypePlugins={[rehypeKatex]}
                       components={{
-                        p: ({ children }) => <p className="mb-3 last:mb-0 text-[13px] md:text-sm leading-relaxed text-zinc-300">{children}</p>,
-                        ul: ({ children }) => <ul className="list-disc pl-5 mb-3 space-y-1.5 text-[13px] md:text-sm text-zinc-400">{children}</ul>,
-                        ol: ({ children }) => <ol className="list-decimal pl-5 mb-3 space-y-1.5 text-[13px] md:text-sm text-zinc-400">{children}</ol>,
-                        li: ({ children }) => <li className="text-[13px] md:text-sm">{children}</li>,
-                        strong: ({ children }) => <strong className="text-cyan-400 font-bold">{children}</strong>,
-                        h1: ({ children }) => <h1 className="text-base font-bold text-white mb-3 mt-1">{children}</h1>,
-                        h2: ({ children }) => <h2 className="text-sm font-semibold text-white mb-2 mt-4">{children}</h2>,
-                        h3: ({ children }) => <h3 className="text-xs font-semibold text-zinc-200 mb-1.5 mt-3">{children}</h3>,
-                        pre: ({ children }) => <pre className="bg-black/40 border border-zinc-800 rounded-lg p-3 my-2.5 overflow-x-auto text-[11px] font-mono text-cyan-400">{children}</pre>,
+                        p: ({ children }) => <p className="mb-3 last:mb-0 text-[13px] md:text-sm leading-relaxed text-[var(--text-secondary)]">{children}</p>,
+                        ul: ({ children }) => <ul className="list-disc pl-5 mb-3 space-y-1.5 text-[13px] md:text-sm text-[var(--text-secondary)]">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal pl-5 mb-3 space-y-1.5 text-[13px] md:text-sm text-[var(--text-secondary)]">{children}</ol>,
+                        li: ({ children }) => <li className="text-[13px] md:text-sm text-[var(--text-secondary)]">{children}</li>,
+                        strong: ({ children }) => <strong className="text-[var(--accent)] font-bold">{children}</strong>,
+                        h1: ({ children }) => <h1 className="text-base font-bold text-[var(--text-primary)] mb-3 mt-1">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-sm font-semibold text-[var(--text-primary)] mb-2 mt-4">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-xs font-semibold text-[var(--text-primary)] mb-1.5 mt-3">{children}</h3>,
+                        pre: ({ children }) => <pre className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg p-3 my-2.5 overflow-x-auto text-[11px] font-mono text-[var(--accent)]">{children}</pre>,
                         code({ inline, className, children, ...props }: any) {
                           return !inline ? (
                             <code className={className} {...props}>{children}</code>
                           ) : (
-                            <code className="bg-zinc-800/60 border border-zinc-700/50 text-pink-400 px-1 py-0.5 rounded text-[11px] font-mono" {...props}>
+                            <code className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-pink-500 px-1 py-0.5 rounded text-[11px] font-mono" {...props}>
                               {children}
                             </code>
                           );
@@ -516,14 +516,14 @@ ${simId === 'simple-pendulum' ? `
 
             {/* Thinking status */}
             {isGenerating && (
-              <div className="flex gap-4 p-4 rounded-xl border bg-zinc-900/10 border-zinc-800/40 animate-pulse">
+              <div className="flex gap-4 p-4 rounded-xl border bg-[var(--bg-tertiary)] border-[var(--border-color)] animate-pulse">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-purple-950 border border-purple-800/50 flex items-center justify-center text-purple-400">
+                  <div className="w-8 h-8 rounded-full bg-purple-950/20 border border-purple-800/30 flex items-center justify-center text-purple-400">
                     <Sparkles size={14} className="animate-spin" style={{ animationDuration: '3s' }} />
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-center gap-1.5 py-1">
-                  <span className="text-xs text-zinc-400 flex items-center gap-2">
+                  <span className="text-xs text-[var(--text-secondary)] flex items-center gap-2">
                     <Loader2 size={12} className="animate-spin text-purple-400" />
                     {generationStep}
                   </span>
@@ -536,7 +536,7 @@ ${simId === 'simple-pendulum' ? `
         </div>
 
         {/* Input area */}
-        <div className="relative z-10 border-t border-zinc-800/40 bg-zinc-950/80 backdrop-blur-md px-4 md:px-8 pt-3 pb-6">
+        <div className="relative z-10 border-t border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-md px-4 md:px-8 pt-3 pb-6">
           <div className="max-w-4xl mx-auto">
             {/* Quick chips */}
             <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-none">
@@ -550,9 +550,9 @@ ${simId === 'simple-pendulum' ? `
                   key={chip}
                   onClick={() => handleSend(chip)}
                   disabled={isGenerating}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 hover:border-cyan-500/30 text-xs text-zinc-400 hover:text-white transition duration-200 whitespace-nowrap cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] hover:border-[var(--accent)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition duration-200 whitespace-nowrap cursor-pointer"
                 >
-                  <Compass size={12} className="text-cyan-400" />
+                  <Compass size={12} className="text-[var(--accent)]" />
                   {chip}
                 </button>
               ))}
@@ -567,7 +567,7 @@ ${simId === 'simple-pendulum' ? `
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 disabled={isGenerating}
                 placeholder={isGenerating ? "正在生成中..." : "在此输入任何科学问题，AI 将为您生成 3D 动力学仿真模型..."}
-                className="w-full pl-5 pr-14 py-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800 focus:border-cyan-500/50 outline-none text-sm text-slate-100 placeholder-zinc-500 focus:shadow-[0_0_20px_rgba(6,182,212,0.04)] transition duration-300 disabled:opacity-50"
+                className="w-full pl-5 pr-14 py-3.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] focus:border-[var(--accent)]/50 outline-none text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:shadow-[0_0_20px_rgba(6,182,212,0.04)] transition duration-300 disabled:opacity-50"
               />
               <button
                 onClick={() => handleSend()}

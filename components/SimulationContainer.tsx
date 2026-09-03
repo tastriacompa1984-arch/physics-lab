@@ -59,11 +59,23 @@ export const SimulationContainer: React.FC<SimulationContainerProps> = ({
   const [sidebarTab, setSidebarTab] = useState<'params' | 'theory' | 'quiz' | 'data'>('params');
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  useEffect(() => {
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth <= 768);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // ChatGPT AI controls
   const [messages, setMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([
     {
       sender: 'ai',
-      text: `你好！我是 LabAI 助手。你可以直接问我实验原理（如：“解释这个实验”），或者输入指令直接控制实验（如：“暂停”、“播放”或“将初速度调到 12”）。`
+      text: `你好！我是 智教智学 助手。你可以直接问我实验原理（如：“解释这个实验”），或者输入指令直接控制实验（如：“暂停”、“播放”或“将初速度调到 12”）。`
     }
   ]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -90,7 +102,7 @@ export const SimulationContainer: React.FC<SimulationContainerProps> = ({
     setMessages([
       {
         sender: 'ai',
-        text: `你好！我是 LabAI 助手。当前实验为【${sim.name}】。你可以直接问我实验原理（如：“解释这个实验”），或者输入指令直接控制实验（如：“暂停”、“播放”或“将初速度设为 12”）。`
+        text: `你好！我是 智教智学 助手。当前实验为【${sim.name}】。你可以直接问我实验原理（如：“解释这个实验”），或者输入指令直接控制实验（如：“暂停”、“播放”或“将初速度设为 12”）。`
       }
     ]);
   }, [sim.id]);
@@ -306,7 +318,7 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
       transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
       height: isMobile ? 'auto' : 'calc(100vh - 112px)',
       overflow: isMobile ? 'visible' : 'hidden'
-    }} className="simulation-container-layout">
+    }} className="simulation-container simulation-container-layout">
       
       {/* Left Column: Visualizer + AI Chat console */}
       <div style={{
@@ -315,7 +327,7 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
         gap: isMobile ? '16px' : '20px',
         height: isMobile ? 'auto' : '100%',
         overflowY: isMobile ? 'visible' : 'auto',
-        paddingRight: '4px'
+        paddingRight: isMobile ? '0' : '4px'
       }} className="visualizer-col">
         
         {/* Workspace Card */}
@@ -457,11 +469,11 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
           padding: '16px',
           display: 'flex',
           flexDirection: 'column',
-          background: 'rgba(10, 10, 12, 0.65)',
+          background: 'var(--glass-bg)',
           border: '1px solid var(--border-color)',
           borderRadius: '12px',
-          flex: '1',
-          minHeight: '220px',
+          flex: isMobile ? 'none' : '1',
+          minHeight: isMobile ? '300px' : '220px',
           overflow: 'hidden'
         }}>
           {/* Chat History Messages */}
@@ -491,8 +503,8 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
                   fontSize: '0.88rem',
                   lineHeight: '1.5',
                   whiteSpace: 'pre-wrap',
-                  background: msg.sender === 'user' ? 'rgba(0, 243, 255, 0.08)' : 'rgba(255, 255, 255, 0.03)',
-                  border: msg.sender === 'user' ? '1px solid rgba(0, 243, 255, 0.25)' : '1px solid rgba(255, 255, 255, 0.06)',
+                  background: msg.sender === 'user' ? 'rgba(0, 243, 255, 0.08)' : 'var(--bg-tertiary)',
+                  border: msg.sender === 'user' ? '1px solid rgba(0, 243, 255, 0.25)' : '1px solid var(--border-color)',
                   color: msg.sender === 'user' ? 'var(--text-primary)' : 'var(--text-secondary)'
                 }}>
                   {msg.text}
@@ -548,7 +560,7 @@ ${parameterSchema.map(p => `- ${p.name} (${p.min} ~ ${p.max} ${p.unit})`).join('
                 flex: 1,
                 padding: '12px 48px 12px 16px',
                 borderRadius: '9999px',
-                background: 'rgba(5, 5, 7, 0.8)',
+                background: 'var(--bg-tertiary)',
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-primary)',
                 outline: 'none',
