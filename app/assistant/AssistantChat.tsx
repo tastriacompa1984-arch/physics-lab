@@ -233,8 +233,8 @@ export default function AssistantPage() {
                   >
                     <summary className="font-semibold text-cyan-400 flex items-center gap-2 cursor-pointer select-none hover:text-cyan-300">
                       <Brain size={14} className={msg.isThinking ? "animate-pulse text-cyan-400" : "text-cyan-500/70"} />
-                      <span>{msg.isThinking ? "智能体正在推导教学逻辑与数理公式..." : "已完成智能体思维链推理"}</span>
-                      <span className="text-[10px] text-neutral-400 ml-auto font-normal">点击折叠/展开</span>
+                      <span>{msg.isThinking ? "智能体思考中..." : "已完成深度思考"}</span>
+                      <span className="text-[10px] text-neutral-400 ml-auto font-normal">点击展开/折叠</span>
                     </summary>
                     <div className="mt-2.5 pt-2 border-t border-cyan-500/10 font-mono text-[11px] leading-relaxed text-neutral-300 whitespace-pre-wrap">
                       {msg.reasoningContent}

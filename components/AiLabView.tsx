@@ -145,7 +145,7 @@ export default function AiLabView({
     };
     setHistory(prev => [newHistoryItem, ...prev]);
 
-    // Create assistant message with simulation immediately mounted
+    // Create assistant message
     const responseId = (Date.now() + 1).toString();
     setMessages(prev => [
       ...prev,
@@ -156,26 +156,32 @@ export default function AiLabView({
         reasoningContent: '',
         isStreaming: true,
         isThinking: true,
-        simulationId: simId || 'simple-pendulum'
+        simulationId: simId // Only attach if an actual simulation matches
       }
     ]);
 
     try {
-      setGenerationStep('正在调度智能体核心与 3D 动力学物理算子...');
+      setGenerationStep('正在生成回答...');
+
+      // Only format as courseware design if the user explicitly asks for courseware/teaching design or selects a courseware topic
+      const isExplicitCoursewareRequest = 
+        query.includes('课件') || 
+        query.includes('教案') || 
+        query.includes('教学设计') || 
+        query.includes('备课') ||
+        (simId !== undefined && query.length >= 4);
+
+      const promptContent = isExplicitCoursewareRequest
+        ? `请为中学课题《${query}》生成一份高质量的互动教学课件设计，包含教学目标、核心公式推导（使用规范 LaTeX 格式如 $$公式$$ 或 $公式$）、实验探究要点与随堂探究问题链。`
+        : query;
+
       const apiRes = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [
-            {
-              role: 'user',
-              content: `请为中学教学课题《${query}》生成一份高质量的深景互动课件设计，包含：
-1. 🎯 教学目标与核心素养（宏观与微观空间认知）
-2. 📐 核心动力学/化学机理解析与公式推导（使用规范 LaTeX 格式，如 $$公式$$ 或 $公式$）
-3. 🧪 三维互动实验探究要点（提示学生如何调控参数如速度、阻尼、浓度、折射率等）
-4. ❓ 课堂启发式随堂探究问题链（2~3个引导学生猜想与验证的探究题）
-语言生动规范，条理清晰，使用标准的 Markdown 排版输出。`
-            }
+            ...messages.filter(m => m.id !== 'welcome').map(m => ({ role: m.role, content: m.content })),
+            { role: 'user', content: promptContent }
           ]
         })
       });
@@ -191,7 +197,7 @@ export default function AiLabView({
       const reader = apiRes.body.getReader();
       const decoder = new TextDecoder('utf-8');
       let buffer = '';
-      let accumulatedContent = `### 🎓 智教智学 · 动态深景互动课件生成成功：**${simName}** ✨\n\n大模型已结合课标要求与教学目标，自动装配并挂载了 **${simName}** 的三维深景交互式仿真环境。老师可直接在下方三维舞台中拖拽交互、调节动力学参数并引导学生探索：\n\n`;
+      let accumulatedContent = '';
       let accumulatedReasoning = '';
 
       while (true) {
@@ -445,8 +451,8 @@ export default function AiLabView({
                     >
                       <summary className="font-semibold text-cyan-400 flex items-center gap-2 cursor-pointer select-none hover:text-cyan-300">
                         <Brain size={14} className={msg.isThinking ? "animate-pulse text-cyan-400" : "text-cyan-500/70"} />
-                        <span>{msg.isThinking ? "智能体推导课标重难点与物理方程中..." : "已完成智能体思维链推理"}</span>
-                        <span className="text-[10px] text-neutral-400 ml-auto font-normal">点击折叠/展开</span>
+                        <span>{msg.isThinking ? "智能体思考中..." : "已完成深度思考"}</span>
+                        <span className="text-[10px] text-neutral-400 ml-auto font-normal">点击展开/折叠</span>
                       </summary>
                       <div className="mt-2.5 pt-2 border-t border-cyan-500/10 font-mono text-[11px] leading-relaxed text-neutral-300 whitespace-pre-wrap">
                         {msg.reasoningContent}
