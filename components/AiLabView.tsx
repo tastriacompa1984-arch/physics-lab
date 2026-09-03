@@ -7,25 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
-// Import simulations to display inline when generated
-import { SoundWaves } from '../simulations/SoundWaves';
-import { ReflectionRefraction } from '../simulations/ReflectionRefraction';
-import { ConvexLens } from '../simulations/ConvexLens';
-import { MeltingCurve } from '../simulations/MeltingCurve';
-import { LeverBalance } from '../simulations/LeverBalance';
-import { FreeFallComparison } from '../simulations/FreeFallComparison';
-import { OhmsLaw } from '../simulations/OhmsLaw';
-import { ProjectileMotion } from '../simulations/ProjectileMotion';
-import { UniformAcceleration } from '../simulations/UniformAcceleration';
-import { SimplePendulum } from '../simulations/SimplePendulum';
-import { SpringMassSystem } from '../simulations/SpringMassSystem';
-import { ForceComposition } from '../simulations/ForceComposition';
-import { DopplerEffect } from '../simulations/DopplerEffect';
-import { ClosedCircuitOhm } from '../simulations/ClosedCircuitOhm';
-import { DoubleSlitInterference } from '../simulations/DoubleSlitInterference';
-import { IdealGasLaw } from '../simulations/IdealGasLaw';
-import { HollowBallCollision } from '../simulations/HollowBallCollision';
-import { ChemistryLab } from '../simulations/ChemistryLab';
+
 
 interface Message {
   id: string;
@@ -333,105 +315,32 @@ export default function AiLabView({
     }
   };
 
-  // Render the selected simulation inline
+  // Render clean experiment card linking to Workbench
   const renderInlineSimulation = (simId: string) => {
-    // Standard mock callbacks for simulations
-    const handleRecordData = (data: any) => console.log('Data recorded:', data);
-
-    const simulationProps = {
-      isPlaying: true,
-      isGridVisible: true,
-      isVectorVisible: true,
-      simSpeed: 1,
-      parameters: {}, // will use internal defaults
-      onRecordData: handleRecordData
-    };
-
-    // Chemistry simulation wrappers
-    if (simId === 'iron-oxygen') {
-      return (
-        <div className="w-full bg-zinc-950 border border-zinc-800/80 rounded-xl overflow-hidden shadow-2xl mt-4">
-          <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex justify-between items-center">
-            <span className="text-xs text-cyan-400 font-semibold flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              实时 3D 动力学仿真器：铁丝在氧气中燃烧
-            </span>
-            <button 
-              onClick={() => onSelectSim('iron-oxygen')}
-              className="text-[10px] text-zinc-400 hover:text-white px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 transition"
-            >
-              打开独立实验台 →
-            </button>
-          </div>
-          <div className="relative aspect-video w-full bg-black">
-            <ChemistryLab experimentId="iron-oxygen" {...simulationProps} />
-          </div>
-        </div>
-      );
-    }
-
-    if (simId === 'kclo3-oxygen') {
-      return (
-        <div className="w-full bg-zinc-950 border border-zinc-800/80 rounded-xl overflow-hidden shadow-2xl mt-4">
-          <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex justify-between items-center">
-            <span className="text-xs text-cyan-400 font-semibold flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              实时 3D 动力学仿真器：加热氯酸钾制取氧气
-            </span>
-            <button 
-              onClick={() => onSelectSim('kclo3-oxygen')}
-              className="text-[10px] text-zinc-400 hover:text-white px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 transition"
-            >
-              打开独立实验台 →
-            </button>
-          </div>
-          <div className="relative aspect-video w-full bg-black">
-            <ChemistryLab experimentId="kclo3-oxygen" {...simulationProps} />
-          </div>
-        </div>
-      );
-    }
-
-    // Physics mapping
-    let SimComponent: React.ComponentType<any> | null = null;
-    switch (simId) {
-      case 'simple-pendulum': SimComponent = SimplePendulum; break;
-      case 'spring-mass': SimComponent = SpringMassSystem; break;
-      case 'reflection-refraction': SimComponent = ReflectionRefraction; break;
-      case 'convex-lens': SimComponent = ConvexLens; break;
-      case 'sound-waves': SimComponent = SoundWaves; break;
-      case 'double-slit-interference': SimComponent = DoubleSlitInterference; break;
-      case 'ideal-gas-law': SimComponent = IdealGasLaw; break;
-      case 'hollow-ball-collision': SimComponent = HollowBallCollision; break;
-      case 'ohms-law': SimComponent = OhmsLaw; break;
-      case 'closed-circuit-ohm': SimComponent = ClosedCircuitOhm; break;
-      case 'free-fall-comparison': SimComponent = FreeFallComparison; break;
-      case 'uniform-acceleration': SimComponent = UniformAcceleration; break;
-      case 'lever-balance': SimComponent = LeverBalance; break;
-      case 'doppler-effect': SimComponent = DopplerEffect; break;
-      case 'force-composition': SimComponent = ForceComposition; break;
-      case 'projectile-motion': SimComponent = ProjectileMotion; break;
-      case 'melting-curve': SimComponent = MeltingCurve; break;
-      default: SimComponent = SimplePendulum;
-    }
-
+    const simName = getSimulationName(simId);
     return (
-      <div className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl overflow-hidden shadow-2xl mt-4">
-        <div className="px-4 py-2.5 bg-[var(--bg-tertiary)] border-b border-[var(--border-color)] flex justify-between items-center">
-          <span className="text-xs text-[var(--accent)] font-semibold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-            实时 3D 动力学仿真器：{getSimulationName(simId)}
-          </span>
-          <button 
-            onClick={() => onSelectSim(simId)}
-            className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-0.5 rounded bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 transition"
-          >
-            打开独立实验台 →
-          </button>
+      <div className="mt-4 p-4 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
+            <Sparkles size={20} />
+          </div>
+          <div>
+            <div className="text-xs md:text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+              <span>配套 3D 互动实验：{simName}</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-normal">三维动力学环境就绪</span>
+            </div>
+            <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+              本课件已关联对应 3D 实验模型，支持参数调控、动态轨迹观察与数据记录
+            </p>
+          </div>
         </div>
-        <div className="relative aspect-video w-full bg-[#05070c]">
-          <SimComponent {...simulationProps} />
-        </div>
+        <button
+          onClick={() => onSelectSim(simId)}
+          className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 hover:from-cyan-500/30 hover:to-purple-500/30 border border-cyan-500/30 text-cyan-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition duration-200 flex-shrink-0 shadow-sm"
+        >
+          <Play size={12} className="fill-current text-cyan-400" />
+          打开 3D 实验台 ➔
+        </button>
       </div>
     );
   };
