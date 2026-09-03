@@ -58,8 +58,6 @@ export const SimulationContainer: React.FC<SimulationContainerProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [sidebarTab, setSidebarTab] = useState<'params' | 'theory' | 'quiz' | 'data'>('params');
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  const [isMobile, setIsMobile] = useState<boolean>(false);
   useEffect(() => {
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
