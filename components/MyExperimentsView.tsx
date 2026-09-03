@@ -72,10 +72,10 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
         {/* Title */}
         <div className="mb-8">
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-            我的存档实验室
+            备课课件库与实验存档
           </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1.5">
-            在此管理您保存的自定义物理参量预设、化学控制状态以及历史观测记录。
+          <p className="text-xs md:text-sm text-[var(--text-secondary)] mt-1.5">
+            在此管理教师自定义生成的互动教学课件、三维物理动力学参数预设与化学课堂记录。
           </p>
         </div>
 
@@ -83,8 +83,8 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
         {savedExperiments.length === 0 ? (
           <div className="py-20 text-center border border-dashed border-[var(--border-color)] rounded-2xl bg-[var(--bg-tertiary)]/50 backdrop-blur-sm flex flex-col items-center justify-center">
             <ShieldAlert size={40} className="text-[var(--text-muted)] mb-3" />
-            <h3 className="text-sm font-semibold text-[var(--text-secondary)]">暂无存档实验</h3>
-            <p className="text-xs text-[var(--text-muted)] mt-1 max-w-xs">您可以在物理实验台中调整参数后，点击“保存预设”将其实时存入此空间。</p>
+            <h3 className="text-sm font-semibold text-[var(--text-secondary)]">暂无备课课件存档</h3>
+            <p className="text-xs text-[var(--text-muted)] mt-1 max-w-xs">您可以在互动实验台中调节教学参数或在 AI 生成工坊中保存课件至此。</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -134,7 +134,7 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
                 <div className="flex justify-between items-center border-t border-[var(--border-color)] pt-4 mt-5">
                   <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
                     <Settings size={12} />
-                    已存储动力学参数
+                    已封装深景课件参数
                   </span>
                   <div className="flex gap-2">
                     <button
@@ -149,7 +149,7 @@ export default function MyExperimentsView({ onSelectSim }: MyExperimentsViewProp
                       className="flex items-center gap-1.5 py-1.5 px-3 bg-gradient-to-tr from-[var(--accent-glow)] to-purple-500/10 border border-[var(--border-color)] hover:border-[var(--accent)] text-xs text-[var(--accent)] hover:text-[var(--text-primary)] rounded-xl transition duration-200"
                     >
                       <Play size={11} className="fill-current text-[var(--accent)] group-hover:text-white" />
-                      运行仿真
+                      启动课堂课件
                     </button>
                   </div>
                 </div>

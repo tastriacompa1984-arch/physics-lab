@@ -20,12 +20,12 @@ export default function AboutView() {
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Title */}
         <div className="text-center mb-16">
-          <span className="text-[10px] uppercase font-bold tracking-widest text-cyan-400 px-3 py-1 rounded-full bg-cyan-500/5 border border-cyan-500/10">关于项目</span>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-white via-slate-200 to-zinc-500 bg-clip-text text-transparent mt-4">
-            重塑虚拟实验室的未来
+          <span className="text-[10px] uppercase font-bold tracking-widest text-cyan-400 px-3 py-1 rounded-full bg-cyan-500/5 border border-cyan-500/10">教学系统介绍</span>
+          <h1 className="text-2xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-white via-slate-200 to-cyan-400 bg-clip-text text-transparent mt-4">
+            智教智学——基于LLM自动生成深景互动教学系统
           </h1>
-          <p className="text-xs md:text-sm text-[var(--text-secondary)] max-w-lg mx-auto mt-4 leading-relaxed">
-            智教智学 致力于利用高精度实时计算物理算子与自然语言交互，让每个人都可以通过 AI 创造并探索属于自己的数字仿真空间。
+          <p className="text-xs md:text-sm text-[var(--text-secondary)] max-w-2xl mx-auto mt-4 leading-relaxed">
+            智教智学 致力于通过大语言模型（LLM）智能驱动与高精度 WebGL/Three.js 实时动力学仿真，重塑启发式理化教育形态。教师只需输入教学课题或知识点，系统即可秒级生成具备三维交互与微观现象拟真的深景课件，让抽象科学规律在课堂上具象呈现。
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export default function AboutView() {
 
         {/* Footnote */}
         <div className="text-center text-[10px] text-[var(--text-muted)] mt-20">
-          © 2026 智教智学 AI数字仿真实验室 | 构建下一代启发式物理化教学平台。
+          © 2026 智教智学——基于LLM自动生成深景互动教学系统 | 构建下一代启发式物理化学数字化互动教学平台。
         </div>
       </div>
     </div>

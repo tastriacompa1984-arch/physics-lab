@@ -61,15 +61,16 @@ export default function AiLabView({
     {
       id: 'welcome',
       role: 'assistant',
-      content: `### 欢迎来到 AI 智能实验生成工坊！ ✨
+      content: `### 欢迎使用 智教智学 · 基于LLM自动生成深景互动教学系统！ ✨
 
-我是您的 **智教智学 科学探索助手**。您可以直接输入任何物理或化学命题，我将为您**自动构建动力学实验模型**并给出详细的物理原理剖析。
+我是您的 **动态课件生成与科学教学助手**。老师只需输入要教的**课程内容、实验命题或重点考点**，系统将基于大语言模型（LLM）秒级生成包含**三维互动实验、动力学参数调控、微观机理解析与随堂探究测评**的深景互动教学课件！
 
-比如，您可以输入：
-* *“帮我设计一个单摆周期与重力加速度关系的物理模型”*
-* *“我想探究光的折射与全反射现象”*
-* *“模拟铁丝在纯氧中剧烈燃烧的化学反应”*
-* *“如何演示声音的振幅和频率对波形的影响”*`
+💡 您可以直接输入教学课题，例如：
+* *“帮我生成高一物理《平抛运动规律》动态课件与轨迹模拟”*
+* *“制作初中物理《光的折射与全反射》课堂互动课件”*
+* *“模拟初中化学《铁丝在纯氧中剧烈燃烧》微观反应与实验课件”*
+* *“生成声音振幅和频率对波形影响的互动教学课件”*
+* *“制作初中物理欧姆定律伏安法测电阻动态实验课件”*`
     }
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -161,54 +162,54 @@ export default function AiLabView({
 
     // AI Generation Steps sequence simulation
     await new Promise(resolve => setTimeout(resolve, 800));
-    setGenerationStep('正在装载 WebGL 物理算子与着色器...');
+    setGenerationStep('正在通过 LLM 深度解析教学知识点与课标目标...');
     await new Promise(resolve => setTimeout(resolve, 800));
-    setGenerationStep('正在构建动力学网格并初始化参数...');
+    setGenerationStep('正在构建三维动力学微分方程与深景渲染算子...');
+    await new Promise(resolve => setTimeout(resolve, 700));
+    setGenerationStep('正在装载动态课件教学结构与随堂探究实验台...');
     await new Promise(resolve => setTimeout(resolve, 600));
-    setGenerationStep('生成完成！正在流式输出实验解析与仿真模型...');
+    setGenerationStep('深景课件构建完成！正在装载互动仿真环境...');
 
     // Prepare generated text content based on simulation
     let generatedContent = '';
     if (simId) {
       const simName = getSimulationName(simId);
-      generatedContent = `### AI 智能构建成功：**${simName}** 实验模块 ✨
+      generatedContent = `### 🎓 LLM 动态互动课件生成成功：**${simName}** ✨
 
-我已经为您在下方渲染窗口中自动生成了 **${simName}** 的实时三维交互式仿真环境。
+大语言模型已结合课标要求与教学目标，自动装配并挂载了 **${simName}** 的三维深景交互式仿真环境。老师可直接在下方三维舞台中拖拽交互、调节动力学参数并引导学生探索。
 
-#### 🧪 实验理论基础
-根据您的要求，该实验的核心动力学及控制机制如下：
+#### 📖 教学重点与探究目标
+1. **现象直观认知**：观察仿真中物体的实时运动轨迹或化学反应现象，建立直观空间物理表象。
+2. **定量规律探究**：通过实时调控物理量（如初速度、夹角、浓度、阻尼等），观察受控曲线与状态变化。
+3. **启发式问题链**：引导学生探讨“参数变化时系统如何响应？”，验证教材中的科学定理与公式。
 
+#### 🧪 核心动力学与深景互动实验
 ${simId === 'simple-pendulum' ? `
-*   **单摆运动公式**：对于小角度单摆，摆动周期 $T$ 与摆长 $L$ 以及重力加速度 $g$ 满足以下关系：
+*   **单摆周期公式**：在小角度摆动下，周期 $T$ 与摆长 $L$ 及重力加速度 $g$ 满足：
     $$T = 2\\pi \\sqrt{\\frac{L}{g}}$$
-*   **物理规律**：周期 $T$ 与摆球的质量 $m$ 以及初始摆角无关（等时性）。而在大角度下，需要引入椭圆积分进行修正。
-*   **仿真调节说明**：您可以在下方实时调整 **摆长 (L)**、**重力加速度 (g)** 和 **空气阻尼系数**，并观察摆球的实时运动曲线。
+*   **教学要点**：周期与摆球质量无关（等时性）；引导学生在下方调节摆长对比摆动快慢。
 ` : simId === 'reflection-refraction' ? `
-*   **折射定律 (Snell's Law)**：光线在交界面发生折射时，入射角 $\\theta_1$ 与折射角 $\\theta_2$ 的正弦值与介质折射率 $n_1, n_2$ 成反比：
+*   **斯涅尔折射定律**：光在分界面发生折射时，满足：
     $$n_1 \\sin(\\theta_1) = n_2 \\sin(\\theta_2)$$
-*   **全反射临界角 (Critical Angle)**：当光从光密介质射向光疏介质，且入射角大于临界角 $\\theta_c$ 时，折射光完全消失：
+*   **全反射现象**：光由光密介质射向光疏介质，当入射角超过临界角 $\\theta_c$ 时折射光消失：
     $$\\theta_c = \\arcsin\\left(\\frac{n_2}{n_1}\\right)$$
 ` : `
-*   **系统动力学算子已装载**：对应的仿真公式及计算方程已经注入下方的交互式 WebGL 实例中。
-*   **实时交互**：您可以使用鼠标在下方画面上进行 **旋转 (Orbit)**、**缩放 (Zoom)** 和 **拖拽**，并通过侧边滑块调节参数。
+*   **三维深景物理算子已装载**：系统已完成运动方程的数值解算与 WebGL 场景注入。
+*   **交互式调控**：支持鼠标左键旋转三维视角、滚轮缩放、右键平移，并可通过下方控制板调节参数。
 `}
 
-#### 📊 实验观察指导
-1.  **观察运动轨迹**：留意物理量在变化过程中的动态响应。
-2.  **记录数据**：系统将在数据记录仪中绘制实时曲线图。
-3.  **验证公式**：通过调整滑块，对比实验输出的周期/折射角等数值与理论公式推导是否一致。`;
+#### 📊 课堂教学互动建议
+1. **动态演示**：播放/暂停物理运动，引导全班观察瞬时速度与加速度状态。
+2. **数据打点记录**：结合数据记录仪进行实时打点，自动绘制物理函数曲线。
+3. **验证公式**：通过调整滑块，对比实验输出的周期/折射角等数值与理论公式推导是否一致。`;
     } else {
-      generatedContent = `### AI 概念性仿真模型装载完成 🔍
+      generatedContent = `### 🎓 AI 教学探究课件生成完成 🔍
 
-目前尚未在经典实验库中匹配到完全一致的 WebGL 三维模型。我为您装载了 **物理系统分析环境**。
+已为您深度检索并解析教学课题 *“${query}”*，并构建对应的物理/化学启发式探究教学课件。
 
-#### 💡 科学原理解释
-针对您的提问 *“${query}”*，其背后的核心原理为：
-*   **系统守恒律**：通常涉及能量、动量或电荷的守恒方程。
-*   **动力学响应**：描述物体在受到外力作用时如何随着时间演化。
-
-#### 🛠 建议的实验搭建方案
-为了深入探索该课题，建议您可以在本站 **实验库** 中选择最接近的物理系统（例如“简谐振动”或“理想气体实验”）进行参数的重组与设计。
+#### 📖 教学原理解析
+*   **物理/化学规律**：围绕课标核心素养，解析该课题的核心控制方程与守恒规律。
+*   **深景仿真搭建**：建议在上方导航栏【互动实验台】中选择对应模块（如匀变速直线运动、平抛运动或酸碱反应）进行三维交互教学。
 
 *(下方已为您挂载通用的阻尼摆球测试环境，供您观察经典简谐衰减过程。)*`;
     }
@@ -249,15 +250,16 @@ ${simId === 'simple-pendulum' ? `
       {
         id: 'welcome',
         role: 'assistant',
-        content: `### 欢迎来到 AI 智能实验生成工坊！ ✨
+        content: `### 欢迎使用 智教智学 · 基于LLM自动生成深景互动教学系统！ ✨
 
-我是您的 **智教智学 科学探索助手**。您可以直接输入任何物理或化学命题，我将为您**自动构建动力学实验模型**并给出详细的物理原理剖析。
+我是您的 **动态课件生成与科学教学助手**。老师只需输入要教的**课程内容、实验命题或重点考点**，系统将基于大语言模型（LLM）秒级生成包含**三维互动实验、动力学参数调控、微观机理解析与随堂探究测评**的深景互动教学课件！
 
-比如，您可以输入：
-* *“帮我设计一个单摆周期与重力加速度关系的物理模型”*
-* *“我想探究光的折射与全反射现象”*
-* *“模拟铁丝在纯氧中剧烈燃烧的化学反应”*
-* *“如何演示声音的振幅和频率对波形的影响”*`
+💡 您可以直接输入教学课题，例如：
+* *“帮我生成高一物理《平抛运动规律》动态课件与轨迹模拟”*
+* *“制作初中物理《光的折射与全反射》课堂互动课件”*
+* *“模拟初中化学《铁丝在纯氧中剧烈燃烧》微观反应与实验课件”*
+* *“生成声音振幅和频率对波形影响的互动教学课件”*
+* *“制作初中物理欧姆定律伏安法测电阻动态实验课件”*`
       }
     ]);
     setActiveHistoryId(null);
@@ -398,13 +400,13 @@ ${simId === 'simple-pendulum' ? `
             className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-[var(--border-color)] hover:border-[var(--border-color)] bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)]/80 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition duration-200"
           >
             <Plus size={16} />
-            新建实验生成
+            新建课件生成
           </button>
         </div>
 
         {/* History List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-1.5 scrollbar-thin">
-          <h4 className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)] px-3 mb-2">历史生成记录</h4>
+          <h4 className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)] px-3 mb-2">已生成互动课件</h4>
           {history.length === 0 ? (
             <div className="text-xs text-[var(--text-muted)] px-3 py-4 text-center">暂无生成记录</div>
           ) : (
@@ -541,10 +543,11 @@ ${simId === 'simple-pendulum' ? `
             {/* Quick chips */}
             <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-none">
               {[
-                '设计大摆角单摆模型',
-                '光的双缝干涉实验',
-                '声音的波形与振幅演示',
-                '铁丝在氧气中燃烧'
+                '高一平抛运动动态课件',
+                '光的折射与全反射',
+                '铁丝在纯氧中剧烈燃烧',
+                '欧姆定律伏安测电阻',
+                '单摆周期等时性实验'
               ].map((chip) => (
                 <button
                   key={chip}
@@ -566,7 +569,7 @@ ${simId === 'simple-pendulum' ? `
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 disabled={isGenerating}
-                placeholder={isGenerating ? "正在生成中..." : "在此输入任何科学问题，AI 将为您生成 3D 动力学仿真模型..."}
+                placeholder={isGenerating ? "正在生成深景互动课件中..." : "输入要教的课题或知识点，LLM 将为您生成 3D 动力学互动课件..."}
                 className="w-full pl-5 pr-14 py-3.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] focus:border-[var(--accent)]/50 outline-none text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:shadow-[0_0_20px_rgba(6,182,212,0.04)] transition duration-300 disabled:opacity-50"
               />
               <button

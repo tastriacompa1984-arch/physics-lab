@@ -112,7 +112,7 @@ export default function AssistantPage() {
             </div>
             <div>
               <span className="font-bold text-base tracking-wide bg-gradient-to-r from-white to-cyan-400 bg-clip-text text-transparent">
-                智教智学 AI 教学助手
+                智教智学 · LLM深景教学助手
               </span>
               <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-cyan-400 font-semibold font-mono">
                 DeepSeek v3
@@ -125,7 +125,7 @@ export default function AssistantPage() {
           href="/"
           className="text-xs text-neutral-400 hover:text-cyan-400 hover:underline transition-colors flex items-center gap-1"
         >
-          返回物理实验台
+          返回深景教学系统
         </a>
       </header>
 

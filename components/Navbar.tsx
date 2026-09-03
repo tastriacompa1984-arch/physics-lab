@@ -44,10 +44,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleMobileCatalog
 }) => {
   const navItems = [
-    { id: 'workbench', name: '实验库', icon: LayoutDashboard },
-    { id: 'ai-lab', name: 'AI生成实验', icon: Brain },
-    { id: 'my-experiments', name: '我的实验', icon: BookOpen },
-    { id: 'about', name: '关于我们', icon: HelpCircle }
+    { id: 'workbench', name: '互动实验台', icon: LayoutDashboard },
+    { id: 'ai-lab', name: '生成动态课件', icon: Brain },
+    { id: 'my-experiments', name: '备课课件库', icon: BookOpen },
+    { id: 'about', name: '系统介绍', icon: HelpCircle }
   ] as const;
 
   const onToggleSidebarWrapper = () => {
@@ -91,14 +91,19 @@ export const Navbar: React.FC<NavbarProps> = ({
         
         <div 
           onClick={() => onViewChange('landing')} 
-          className="flex items-center gap-2 cursor-pointer group"
+          className="flex items-center gap-2.5 cursor-pointer group"
         >
           <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/10 group-hover:scale-105 transition duration-200">
             <Sparkles size={16} className="text-white fill-current animate-pulse" />
           </div>
-          <span className="text-lg font-black bg-gradient-to-r from-[var(--text-primary)] via-slate-500 to-slate-600 bg-clip-text text-transparent tracking-tight">
-            智教智学
-          </span>
+          <div className="flex flex-col">
+            <span className="text-base md:text-lg font-black bg-gradient-to-r from-[var(--text-primary)] via-slate-200 to-cyan-400 bg-clip-text text-transparent tracking-tight leading-none">
+              智教智学
+            </span>
+            <span className="text-[9px] text-[var(--text-muted)] tracking-wider font-medium hidden sm:block mt-0.5">
+              基于LLM深景互动教学系统
+            </span>
+          </div>
         </div>
       </div>
 

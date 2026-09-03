@@ -14,17 +14,17 @@ export default function AiLabPage() {
           <Sparkles size={32} className="animate-pulse" />
         </div>
         <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent mb-3">
-          AI 实验生成工坊
+          动态课件生成工坊
         </h1>
         <p className="text-sm text-neutral-400 leading-relaxed mb-8">
-          基于大模型与动力学仿真环境，系统正在研发智能物理/化学实验环境自动构建工具，后续支持一键定制您自己的科学探索空间。
+          智教智学——基于大语言模型（LLM）与动力学仿真环境，教师只需输入教学内容，系统即可自动生成包含三维深景实验的互动课件。
         </p>
         <a
           href="/"
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-sm text-neutral-300 hover:text-white"
         >
           <ArrowLeft size={16} />
-          返回物理实验台
+          返回深景教学系统
         </a>
       </div>
     </div>

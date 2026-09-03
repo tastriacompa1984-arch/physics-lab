@@ -66,50 +66,85 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           {/* Badge */}
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/5 border border-cyan-500/10 mb-6"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-6"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-[10px] md:text-xs text-cyan-300 font-bold uppercase tracking-wider">AI数字物理/化学仿照空间</span>
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="text-[11px] md:text-xs text-cyan-300 font-bold tracking-wider">
+              LLM 驱动 · 动态课件生成 · 深景互动教学系统
+            </span>
           </motion.div>
           
           {/* Title */}
           <motion.h1 
             variants={itemVariants}
-            className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-none mb-6"
+            className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight mb-6"
           >
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent filter drop-shadow-[0_0_20px_rgba(139,92,246,0.15)]">
-              智教智学 —— AI数字仿真实验室
+            <span className="block text-lg md:text-2xl font-bold bg-gradient-to-r from-cyan-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent mb-2">
+              智教智学
+            </span>
+            <span className="bg-gradient-to-r from-white via-slate-100 to-cyan-300 bg-clip-text text-transparent filter drop-shadow-[0_0_25px_rgba(6,182,212,0.15)]">
+              基于LLM自动生成深景互动教学系统
             </span>
           </motion.h1>
           
           {/* Subtitle */}
           <motion.p 
             variants={itemVariants}
-            className="text-sm md:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-10"
+            className="text-xs md:text-base text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-8"
           >
-            输入题目，自动生成实验模型与实验过程。基于高精度三维 WebGL 算子，重塑启发式理化教育形态。
+            教师只需输入要教的内容或知识点，大模型（LLM）秒级生成包含三维深景仿真、动力学参数交互、实验现象演示与随堂习题的动态互动课件。
           </motion.p>
 
-          {/* ChatGPT-style Prompter Input Box */}
+          {/* Teacher Courseware Generator Prompter Input Box */}
           <motion.div 
             variants={itemVariants}
-            className="w-full max-w-2xl bg-[var(--glass-bg)] border border-[var(--border-color)] focus-within:border-[var(--accent)]/50 rounded-2xl p-2.5 backdrop-blur-md focus-within:shadow-[0_0_30px_rgba(6,182,212,0.06)] transition-all duration-300 flex items-center relative"
+            className="w-full max-w-2xl bg-[var(--glass-bg)] border border-[var(--border-color)] focus-within:border-[var(--accent)] rounded-2xl p-2 md:p-2.5 backdrop-blur-md focus-within:shadow-[0_0_35px_rgba(6,182,212,0.12)] transition-all duration-300 flex items-center relative"
           >
             <input
               type="text"
-              placeholder="输入实验命题（例如：帮我模拟单摆重力加速度实验...）"
+              placeholder="输入要教的内容（例如：高一物理平抛运动探究课件、铁丝在纯氧中燃烧...）"
               value={promptInput}
               onChange={(e) => setPromptInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleGenerateSubmit()}
-              className="flex-1 bg-transparent pl-4 pr-12 py-2 text-xs md:text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none"
+              className="flex-1 bg-transparent pl-4 pr-3 py-2.5 text-xs md:text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none"
             />
             <button
               onClick={handleGenerateSubmit}
               disabled={!promptInput.trim()}
-              className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-indigo-500 hover:from-cyan-300 hover:to-indigo-400 flex items-center justify-center text-black font-semibold shadow-md active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-tr from-cyan-400 to-indigo-500 hover:from-cyan-300 hover:to-indigo-400 flex items-center gap-1.5 text-black text-xs md:text-sm font-bold shadow-md active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:pointer-events-none shrink-0"
             >
-              <Send size={15} />
+              <Sparkles size={14} className="fill-current animate-pulse" />
+              <span>生成动态课件</span>
             </button>
+          </motion.div>
+
+          {/* Teacher Quick Topic Suggestions */}
+          <motion.div 
+            variants={itemVariants}
+            className="flex flex-wrap items-center justify-center gap-2 mt-4 max-w-2xl"
+          >
+            <span className="text-[11px] text-[var(--text-muted)] flex items-center gap-1">
+              💡 推荐教学课题:
+            </span>
+            {[
+              '平抛运动动态课件',
+              '光的折射与全反射',
+              '铁丝在纯氧中燃烧',
+              '欧姆定律伏安测阻',
+              '单摆周期与重力加速度',
+              '双缝干涉波形演示'
+            ].map((topic) => (
+              <button
+                key={topic}
+                onClick={() => {
+                  setPromptInput(topic);
+                  onGeneratePrompt(topic);
+                }}
+                className="text-[11px] px-2.5 py-1 rounded-lg bg-[var(--bg-tertiary)]/70 hover:bg-[var(--accent)]/15 border border-[var(--border-color)] hover:border-[var(--accent)]/40 text-[var(--text-secondary)] hover:text-[var(--accent)] transition duration-200 cursor-pointer"
+              >
+                {topic}
+              </button>
+            ))}
           </motion.div>
         </div>
 
@@ -227,28 +262,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* Feature Grid Highlights */}
         <motion.div variants={itemVariants} className="w-full max-w-6xl mt-6">
           <h3 className="text-center text-sm md:text-base font-bold text-[var(--text-secondary)] mb-10 tracking-widest uppercase">
-            科学动力学底层技术架构
+            核心教学系统能力与深景架构
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
-              <Zap size={20} className="text-cyan-400 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">高刷 WebGL 三维渲染</h4>
-              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">整合 GPU 渲染与双缓冲绘制，支持高拟真材质与流畅平滑的三维仿真画布。</p>
+              <Sparkles size={20} className="text-cyan-400 mb-3" />
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">LLM 动态课件生成器</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">输入教学知识点或课标实验，LLM 秒级生成教学结构、板书设计与互动探究课件。</p>
             </div>
             <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
-              <Compass size={20} className="text-purple-400 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">高精度微分方程求解</h4>
-              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">使用龙格库塔(RK4)及 Verlet 运动积分器，保证运动形态契合经典物理规律。</p>
+              <Zap size={20} className="text-purple-400 mb-3" />
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">深景 3D 物理化学拟真</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">基于 WebGL/Three.js 高精度渲染，将抽象微观分子反应与宏观动力学运动具象化呈现。</p>
             </div>
             <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
-              <Sparkles size={20} className="text-pink-400 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">AI 自然语言控制台</h4>
-              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">提供智能 AI 探索助手，支持一键式解析输入文本并自动构建三维仿真场景。</p>
+              <Compass size={20} className="text-pink-400 mb-3" />
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">高精度数值动力学引擎</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">内置龙格库塔(RK4)与力学方程微分求解器，支持参数实时调节与动态响应。</p>
             </div>
             <div className="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--glass-bg)] backdrop-blur-sm">
               <BarChart2 size={20} className="text-amber-500 mb-3" />
-              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">数据记录仪与曲线绘制</h4>
-              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">实时打点捕获物理规律，支持折线图展示与 CSV 格式实验数据下载功能。</p>
+              <h4 className="font-bold text-xs md:text-sm text-[var(--text-primary)] mb-1.5">随堂测评与数据记录仪</h4>
+              <p className="text-[11px] md:text-xs text-[var(--text-secondary)] leading-relaxed">集成随堂互动自测习题与数字化打点记录仪，支持实时曲线拟合与数据导出。</p>
             </div>
           </div>
         </motion.div>
@@ -256,8 +291,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
       {/* Footer Info */}
       <footer className="text-center py-8 px-6 border-t border-[var(--border-color)] bg-[var(--bg-secondary)] text-[10px] text-[var(--text-muted)] z-10 font-sans">
-        <p>Copyright © 2026 智教智学. All Rights Reserved. Created for Educational Visualizations.</p>
-        <p className="mt-1.5 text-[var(--text-muted)]">基于 Next.js 15 + Tailwind CSS + Three.js 实时渲染架构</p>
+        <p>Copyright © 2026 智教智学——基于LLM自动生成深景互动教学系统. All Rights Reserved.</p>
+        <p className="mt-1.5 text-[var(--text-muted)]">基于 Next.js 15 + Tailwind CSS + Three.js + DeepSeek-LLM 实时渲染架构</p>
       </footer>
     </motion.div>
   );
