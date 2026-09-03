@@ -76,9 +76,9 @@ export async function POST(request: Request) {
     // Combine system prompt and user history
     const payloadMessages = [systemPrompt, ...messages];
 
-    // 5. Connect to DeepSeek API with Timeout (30 seconds)
+    // 5. Connect to DeepSeek API with streaming support
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000);
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
 
     try {
       const response = await fetch(`${baseUrl}/v1/chat/completions`, {
@@ -91,6 +91,7 @@ export async function POST(request: Request) {
           model: process.env.AI_MODEL || 'deepseek-v4-flash',
           messages: payloadMessages,
           temperature: 0.7,
+          stream: true
         }),
         signal: controller.signal
       });
@@ -101,22 +102,20 @@ export async function POST(request: Request) {
         const errorText = await response.text();
         console.error('AI API Error response:', errorText);
         return NextResponse.json(
-          { error: 'AI 服务暂时不可用，请稍后再试。' },
+          { error: 'AI 教学引擎暂时不可用，请稍后再试。' },
           { status: 502 }
         );
       }
 
-      const data = await response.json();
-      const assistantMessage = data?.choices?.[0]?.message;
-
-      if (!assistantMessage) {
-        return NextResponse.json(
-          { error: 'AI 未返回有效回复。' },
-          { status: 502 }
-        );
-      }
-
-      return NextResponse.json(assistantMessage);
+      // Return real-time Server-Sent Events (SSE) stream directly to client
+      return new Response(response.body, {
+        headers: {
+          'Content-Type': 'text/event-stream; charset=utf-8',
+          'Cache-Control': 'no-cache, no-transform',
+          'Connection': 'keep-alive',
+          'X-Accel-Buffering': 'no'
+        }
+      });
 
     } catch (fetchError: any) {
       clearTimeout(timeoutId);

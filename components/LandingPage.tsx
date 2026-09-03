@@ -292,7 +292,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* Footer Info */}
       <footer className="text-center py-8 px-6 border-t border-[var(--border-color)] bg-[var(--bg-secondary)] text-[10px] text-[var(--text-muted)] z-10 font-sans">
         <p>Copyright © 2026 智教智学——基于LLM自动生成深景互动教学系统. All Rights Reserved.</p>
-        <p className="mt-1.5 text-[var(--text-muted)]">基于 Next.js 15 + Tailwind CSS + Three.js + DeepSeek-LLM 实时渲染架构</p>
+        <p className="mt-1.5 text-[var(--text-muted)]">基于 Next.js 15 + Tailwind CSS + Three.js + 智能认知教学大模型 实时渲染架构</p>
       </footer>
     </motion.div>
   );

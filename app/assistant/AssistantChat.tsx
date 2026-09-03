@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, ArrowLeft, Bot, User, Sparkles, AlertCircle, Compass, HelpCircle, Loader2 } from 'lucide-react';
+import { Send, ArrowLeft, Bot, User, Sparkles, AlertCircle, Compass, HelpCircle, Loader2, Brain } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -9,6 +9,8 @@ import rehypeKatex from 'rehype-katex';
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
+  reasoningContent?: string;
+  isThinking?: boolean;
 }
 
 export default function AssistantPage() {
@@ -50,8 +52,16 @@ export default function AssistantPage() {
     setInputValue('');
     setIsLoading(true);
 
-    const updatedHistory: ChatMessage[] = [...messages, { role: 'user', content: query }];
-    setMessages(updatedHistory);
+    const userMessage: ChatMessage = { role: 'user', content: query };
+    const assistantMessage: ChatMessage = { 
+      role: 'assistant', 
+      content: '', 
+      reasoningContent: '', 
+      isThinking: true 
+    };
+
+    const updatedHistory = [...messages, userMessage];
+    setMessages([...updatedHistory, assistantMessage]);
 
     try {
       const response = await fetch('/api/chat', {
@@ -66,12 +76,69 @@ export default function AssistantPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || '请求失败，请稍后重试。');
       }
 
-      const reply = await response.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: reply.content }]);
+      if (!response.body) {
+        throw new Error('当前浏览器不支持流式传输。');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+      let accumulatedContent = '';
+      let accumulatedReasoning = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || trimmed === 'data: [DONE]') continue;
+          if (trimmed.startsWith('data: ')) {
+            try {
+              const parsed = JSON.parse(trimmed.slice(6));
+              const delta = parsed.choices?.[0]?.delta;
+              if (delta) {
+                if (delta.reasoning_content) {
+                  accumulatedReasoning += delta.reasoning_content;
+                }
+                if (delta.content) {
+                  accumulatedContent += delta.content;
+                }
+
+                setMessages(prev => {
+                  const copy = [...prev];
+                  const last = copy[copy.length - 1];
+                  if (last && last.role === 'assistant') {
+                    last.reasoningContent = accumulatedReasoning;
+                    last.content = accumulatedContent;
+                    last.isThinking = !accumulatedContent && !!accumulatedReasoning;
+                  }
+                  return copy;
+                });
+              }
+            } catch (e) {
+              // skip parse errors on partial chunks
+            }
+          }
+        }
+      }
+
+      setMessages(prev => {
+        const copy = [...prev];
+        const last = copy[copy.length - 1];
+        if (last && last.role === 'assistant') {
+          last.isThinking = false;
+        }
+        return copy;
+      });
 
     } catch (err: any) {
       console.error(err);
@@ -112,10 +179,10 @@ export default function AssistantPage() {
             </div>
             <div>
               <span className="font-bold text-base tracking-wide bg-gradient-to-r from-white to-cyan-400 bg-clip-text text-transparent">
-                智教智学 · LLM深景教学助手
+                智教智学 · AI 教学认知助手
               </span>
-              <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-cyan-400 font-semibold font-mono">
-                DeepSeek v4-Flash
+              <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-semibold font-mono">
+                教学智能体就绪
               </span>
             </div>
           </div>
@@ -158,6 +225,23 @@ export default function AssistantPage() {
 
               {/* Message Content */}
               <div className="flex-1 overflow-hidden prose prose-invert prose-sm max-w-none">
+                {/* DeepSeek Harness Style Collapsible Reasoning Trajectory */}
+                {msg.reasoningContent && (
+                  <details 
+                    className="mb-3.5 p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-xs text-neutral-300 group select-text" 
+                    open={msg.isThinking}
+                  >
+                    <summary className="font-semibold text-cyan-400 flex items-center gap-2 cursor-pointer select-none hover:text-cyan-300">
+                      <Brain size={14} className={msg.isThinking ? "animate-pulse text-cyan-400" : "text-cyan-500/70"} />
+                      <span>{msg.isThinking ? "智能体正在推导教学逻辑与数理公式..." : "已完成智能体思维链推理"}</span>
+                      <span className="text-[10px] text-neutral-400 ml-auto font-normal">点击折叠/展开</span>
+                    </summary>
+                    <div className="mt-2.5 pt-2 border-t border-cyan-500/10 font-mono text-[11px] leading-relaxed text-neutral-300 whitespace-pre-wrap">
+                      {msg.reasoningContent}
+                    </div>
+                  </details>
+                )}
+
                 <ReactMarkdown
                   remarkPlugins={[remarkMath]}
                   rehypePlugins={[rehypeKatex]}

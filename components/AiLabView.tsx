@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, Bot, User, Compass, HelpCircle, Loader2, ArrowRight, BookOpen, Clock, Trash2, Plus } from 'lucide-react';
+import { Send, Sparkles, Bot, User, Compass, HelpCircle, Loader2, ArrowRight, BookOpen, Clock, Trash2, Plus, Brain } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -31,7 +31,9 @@ interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  reasoningContent?: string;
   isStreaming?: boolean;
+  isThinking?: boolean;
   simulationId?: string; // If set, renders the simulation inside this message bubble
 }
 
@@ -150,6 +152,7 @@ export default function AiLabView({
 
     // Determine target simulation
     const simId = mapPromptToSimulation(query);
+    const simName = simId ? getSimulationName(simId) : '科学探究实验环境';
 
     // Save to history list
     const newHistoryItem: HistoryItem = {
@@ -160,22 +163,23 @@ export default function AiLabView({
     };
     setHistory(prev => [newHistoryItem, ...prev]);
 
-    // AI Generation Steps sequence simulation
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setGenerationStep('正在通过 LLM 深度解析教学知识点与课标目标...');
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setGenerationStep('正在构建三维动力学微分方程与深景渲染算子...');
-    await new Promise(resolve => setTimeout(resolve, 700));
-    setGenerationStep('正在装载动态课件教学结构与随堂探究实验台...');
-    await new Promise(resolve => setTimeout(resolve, 600));
-    setGenerationStep('深景课件构建完成！正在装载互动仿真环境...');
-
-    // Prepare generated text content based on simulation
-    let generatedContent = '';
-    const simName = simId ? getSimulationName(simId) : '科学探究仿真环境';
+    // Create assistant message with simulation immediately mounted
+    const responseId = (Date.now() + 1).toString();
+    setMessages(prev => [
+      ...prev,
+      {
+        id: responseId,
+        role: 'assistant',
+        content: '',
+        reasoningContent: '',
+        isStreaming: true,
+        isThinking: true,
+        simulationId: simId || 'simple-pendulum'
+      }
+    ]);
 
     try {
-      setGenerationStep('正在请求 DeepSeek-V4 Flash 解析教学知识点并生成教案课件...');
+      setGenerationStep('正在调度智能体核心与 3D 动力学物理算子...');
       const apiRes = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -183,30 +187,83 @@ export default function AiLabView({
           messages: [
             {
               role: 'user',
-              content: `请为中学理化教学课题《${query}》生成一份高质量的互动教学课件设计，包含：
+              content: `请为中学教学课题《${query}》生成一份高质量的深景互动课件设计，包含：
 1. 🎯 教学目标与核心素养（宏观与微观空间认知）
-2. 📐 核心动力学/化学机理解析与公式推导（使用规范的 LaTeX 格式如 $$公式$$）
+2. 📐 核心动力学/化学机理解析与公式推导（使用规范 LaTeX 格式，如 $$公式$$ 或 $公式$）
 3. 🧪 三维互动实验探究要点（提示学生如何调控参数如速度、阻尼、浓度、折射率等）
 4. ❓ 课堂启发式随堂探究问题链（2~3个引导学生猜想与验证的探究题）
-语言生动规范，结构清晰，使用漂亮的 Markdown 输出。`
+语言生动规范，条理清晰，使用标准的 Markdown 排版输出。`
             }
           ]
         })
       });
 
-      if (apiRes.ok) {
-        const data = await apiRes.json();
-        if (data && data.content) {
-          generatedContent = `### 🎓 DeepSeek-V4 Flash 动态互动课件生成成功：**${simName}** ✨\n\n大模型已为您智能装配了 **${simName}** 的三维深景仿真环境，并在下方挂载了实时交互实验台：\n\n` + data.content;
+      if (!apiRes.ok) {
+        throw new Error('API request failed');
+      }
+
+      if (!apiRes.body) {
+        throw new Error('Streaming not supported');
+      }
+
+      const reader = apiRes.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+      let accumulatedContent = `### 🎓 智教智学 · 动态深景互动课件生成成功：**${simName}** ✨\n\n大模型已结合课标要求与教学目标，自动装配并挂载了 **${simName}** 的三维深景交互式仿真环境。老师可直接在下方三维舞台中拖拽交互、调节动力学参数并引导学生探索：\n\n`;
+      let accumulatedReasoning = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || trimmed === 'data: [DONE]') continue;
+          if (trimmed.startsWith('data: ')) {
+            try {
+              const parsed = JSON.parse(trimmed.slice(6));
+              const delta = parsed.choices?.[0]?.delta;
+              if (delta) {
+                if (delta.reasoning_content) {
+                  accumulatedReasoning += delta.reasoning_content;
+                }
+                if (delta.content) {
+                  accumulatedContent += delta.content;
+                }
+
+                setMessages(prev =>
+                  prev.map(m =>
+                    m.id === responseId
+                      ? {
+                          ...m,
+                          content: accumulatedContent,
+                          reasoningContent: accumulatedReasoning,
+                          isThinking: !accumulatedContent && !!accumulatedReasoning
+                        }
+                      : m
+                  )
+                );
+              }
+            } catch (e) {}
+          }
         }
       }
-    } catch (e) {
-      console.warn('DeepSeek API call fallback to local engine:', e);
-    }
 
-    if (!generatedContent) {
-      if (simId) {
-        generatedContent = `### 🎓 LLM 动态互动课件生成成功：**${simName}** ✨
+      setMessages(prev =>
+        prev.map(m =>
+          m.id === responseId
+            ? { ...m, isStreaming: false, isThinking: false }
+            : m
+        )
+      );
+
+    } catch (e) {
+      console.warn('API streaming fallback to local template:', e);
+      const fallbackContent = `### 🎓 智教智学 · 动态深景互动课件生成成功：**${simName}** ✨
 
 大语言模型已结合课标要求与教学目标，自动装配并挂载了 **${simName}** 的三维深景交互式仿真环境。老师可直接在下方三维舞台中拖拽交互、调节动力学参数并引导学生探索。
 
@@ -216,66 +273,23 @@ export default function AiLabView({
 3. **启发式问题链**：引导学生探讨“参数变化时系统如何响应？”，验证教材中的科学定理与公式。
 
 #### 🧪 核心动力学与深景互动实验
-${simId === 'simple-pendulum' ? `
-*   **单摆周期公式**：在小角度摆动下，周期 $T$ 与摆长 $L$ 及重力加速度 $g$ 满足：
-    $$T = 2\\pi \\sqrt{\\frac{L}{g}}$$
-*   **教学要点**：周期与摆球质量无关（等时性）；引导学生在下方调节摆长对比摆动快慢。
-` : simId === 'reflection-refraction' ? `
-*   **斯涅尔折射定律**：光在分界面发生折射时，满足：
-    $$n_1 \\sin(\\theta_1) = n_2 \\sin(\\theta_2)$$
-*   **全反射现象**：光由光密介质射向光疏介质，当入射角超过临界角 $\\theta_c$ 时折射光消失：
-    $$\\theta_c = \\arcsin\\left(\\frac{n_2}{n_1}\\right)$$
-` : `
-*   **三维深景物理算子已装载**：系统已完成运动方程的数值解算与 WebGL 场景注入。
-*   **交互式调控**：支持鼠标左键旋转三维视角、滚轮缩放、右键平移，并可通过下方控制板调节参数。
-`}
+系统已完成运动方程的数值解算与 WebGL 场景注入，支持实时三维调控与数据打点。
 
 #### 📊 课堂教学互动建议
 1. **动态演示**：播放/暂停物理运动，引导全班观察瞬时速度与加速度状态。
 2. **数据打点记录**：结合数据记录仪进行实时打点，自动绘制物理函数曲线。
-3. **验证公式**：通过调整滑块，对比实验输出的周期/折射角等数值与理论公式推导是否一致。`;
-      } else {
-        generatedContent = `### 🎓 AI 教学探究课件生成完成 🔍
+3. **验证公式**：通过调整滑块，对比实验输出的数值与理论公式推导是否一致。`;
 
-已为您深度检索并解析教学课题 *“${query}”*，并构建对应的物理/化学启发式探究教学课件。
-
-#### 📖 教学原理解析
-*   **物理/化学规律**：围绕课标核心素养，解析该课题的核心控制方程与守恒规律。
-*   **深景仿真搭建**：建议在上方导航栏【互动实验台】中选择对应模块（如匀变速直线运动、平抛运动或酸碱反应）进行三维交互教学。
-
-*(下方已为您挂载通用的阻尼摆球测试环境，供您观察经典简谐衰减过程。)*`;
-      }
+      setMessages(prev =>
+        prev.map(m =>
+          m.id === responseId
+            ? { ...m, content: fallbackContent, isStreaming: false, isThinking: false }
+            : m
+        )
+      );
+    } finally {
+      setIsGenerating(false);
     }
-
-    // Stream the content character by character
-    const responseId = (Date.now() + 1).toString();
-    setIsGenerating(false);
-    
-    // Add empty assistant message first
-    setMessages(prev => [...prev, { id: responseId, role: 'assistant', content: '', isStreaming: true }]);
-    
-    let currentLen = 0;
-    const interval = setInterval(() => {
-      currentLen += 15; // Speed multiplier for streaming
-      if (currentLen >= generatedContent.length) {
-        clearInterval(interval);
-        setMessages(prev =>
-          prev.map(m =>
-            m.id === responseId
-              ? { ...m, content: generatedContent, isStreaming: false, simulationId: simId || 'simple-pendulum' }
-              : m
-          )
-        );
-      } else {
-        setMessages(prev =>
-          prev.map(m =>
-            m.id === responseId
-              ? { ...m, content: generatedContent.substring(0, currentLen) }
-              : m
-          )
-        );
-      }
-    }, 20);
   };
 
   const startNewChat = () => {
@@ -514,6 +528,23 @@ ${simId === 'simple-pendulum' ? `
 
                 {/* Content */}
                 <div className="flex-1 overflow-hidden">
+                  {/* DeepSeek Harness Style Collapsible Reasoning Trajectory */}
+                  {msg.reasoningContent && (
+                    <details 
+                      className="mb-3.5 p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-xs text-neutral-300 group select-text" 
+                      open={msg.isThinking}
+                    >
+                      <summary className="font-semibold text-cyan-400 flex items-center gap-2 cursor-pointer select-none hover:text-cyan-300">
+                        <Brain size={14} className={msg.isThinking ? "animate-pulse text-cyan-400" : "text-cyan-500/70"} />
+                        <span>{msg.isThinking ? "智能体推导课标重难点与物理方程中..." : "已完成智能体思维链推理"}</span>
+                        <span className="text-[10px] text-neutral-400 ml-auto font-normal">点击折叠/展开</span>
+                      </summary>
+                      <div className="mt-2.5 pt-2 border-t border-cyan-500/10 font-mono text-[11px] leading-relaxed text-neutral-300 whitespace-pre-wrap">
+                        {msg.reasoningContent}
+                      </div>
+                    </details>
+                  )}
+
                   <div className="prose prose-invert prose-sm max-w-none text-[var(--text-primary)]">
                     <ReactMarkdown
                       remarkPlugins={[remarkMath]}
