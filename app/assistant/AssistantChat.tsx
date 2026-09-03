@@ -115,7 +115,7 @@ export default function AssistantPage() {
                 智教智学 · LLM深景教学助手
               </span>
               <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-cyan-400 font-semibold font-mono">
-                DeepSeek v3
+                DeepSeek v4-Flash
               </span>
             </div>
           </div>

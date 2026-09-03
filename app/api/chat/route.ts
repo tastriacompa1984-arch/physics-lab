@@ -57,29 +57,28 @@ export async function POST(request: Request) {
     }
 
     // 4. Retrieve API key and Base URL from Server Environment
-    const apiKey = process.env.DEEPSEEK_API_KEY || '6fc33b9b3098489c9125c0e020061cfb.G0j68pOtyr0y4i8b';
+    const apiKey = process.env.DEEPSEEK_API_KEY || 'sk-c95d83fe9fbf4109bcc77732a3352385';
     const baseUrl = process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com';
 
     // System prompt setting
     const systemPrompt = {
       role: 'system',
-      content: `你是 智教智学 教学助手。你的职责是：
-- 解答初中物理问题
-- 解答高中物理问题
-- 解答初中化学问题
-- 解答高中化学问题
-- 解答中学数学问题
-- 用中学生能够理解的语言回答
-- 回答时尽量结合实验现象解释原理
-- 输出结构清晰，适合教学场景`
+      content: `你是“智教智学——基于LLM自动生成深景互动教学系统”的专业智能教学AI助手。
+你的职责是：
+- 深入解答初中与高中的物理、化学和数学疑难问题
+- 结合生活实际现象与物理/化学实验原理进行启发式剖析
+- 详细推导相关数理公式并使用标准的 LaTeX 格式展示（例如 $$公式$$ 或 $公式$）
+- 解释微观机理（如分子间作用力、电子转移、动量守恒、能量相变）
+- 如果用户要求生成课件或教学设计，请按照结构化的教学目标、重难点、动力学公式推导、互动实验指导输出
+- 语言严谨生动，条理清晰，符合中学课标与启发式教学规范`
     };
 
     // Combine system prompt and user history
     const payloadMessages = [systemPrompt, ...messages];
 
-    // 5. Connect to DeepSeek API with Timeout (15 seconds)
+    // 5. Connect to DeepSeek API with Timeout (30 seconds)
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
       const response = await fetch(`${baseUrl}/v1/chat/completions`, {
@@ -89,7 +88,7 @@ export async function POST(request: Request) {
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: process.env.AI_MODEL || 'glm-4-flash',
+          model: process.env.AI_MODEL || 'deepseek-v4-flash',
           messages: payloadMessages,
           temperature: 0.7,
         }),

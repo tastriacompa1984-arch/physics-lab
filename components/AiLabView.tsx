@@ -172,9 +172,41 @@ export default function AiLabView({
 
     // Prepare generated text content based on simulation
     let generatedContent = '';
-    if (simId) {
-      const simName = getSimulationName(simId);
-      generatedContent = `### 🎓 LLM 动态互动课件生成成功：**${simName}** ✨
+    const simName = simId ? getSimulationName(simId) : '科学探究仿真环境';
+
+    try {
+      setGenerationStep('正在请求 DeepSeek-V4 Flash 解析教学知识点并生成教案课件...');
+      const apiRes = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: 'user',
+              content: `请为中学理化教学课题《${query}》生成一份高质量的互动教学课件设计，包含：
+1. 🎯 教学目标与核心素养（宏观与微观空间认知）
+2. 📐 核心动力学/化学机理解析与公式推导（使用规范的 LaTeX 格式如 $$公式$$）
+3. 🧪 三维互动实验探究要点（提示学生如何调控参数如速度、阻尼、浓度、折射率等）
+4. ❓ 课堂启发式随堂探究问题链（2~3个引导学生猜想与验证的探究题）
+语言生动规范，结构清晰，使用漂亮的 Markdown 输出。`
+            }
+          ]
+        })
+      });
+
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        if (data && data.content) {
+          generatedContent = `### 🎓 DeepSeek-V4 Flash 动态互动课件生成成功：**${simName}** ✨\n\n大模型已为您智能装配了 **${simName}** 的三维深景仿真环境，并在下方挂载了实时交互实验台：\n\n` + data.content;
+        }
+      }
+    } catch (e) {
+      console.warn('DeepSeek API call fallback to local engine:', e);
+    }
+
+    if (!generatedContent) {
+      if (simId) {
+        generatedContent = `### 🎓 LLM 动态互动课件生成成功：**${simName}** ✨
 
 大语言模型已结合课标要求与教学目标，自动装配并挂载了 **${simName}** 的三维深景交互式仿真环境。老师可直接在下方三维舞台中拖拽交互、调节动力学参数并引导学生探索。
 
@@ -202,8 +234,8 @@ ${simId === 'simple-pendulum' ? `
 1. **动态演示**：播放/暂停物理运动，引导全班观察瞬时速度与加速度状态。
 2. **数据打点记录**：结合数据记录仪进行实时打点，自动绘制物理函数曲线。
 3. **验证公式**：通过调整滑块，对比实验输出的周期/折射角等数值与理论公式推导是否一致。`;
-    } else {
-      generatedContent = `### 🎓 AI 教学探究课件生成完成 🔍
+      } else {
+        generatedContent = `### 🎓 AI 教学探究课件生成完成 🔍
 
 已为您深度检索并解析教学课题 *“${query}”*，并构建对应的物理/化学启发式探究教学课件。
 
@@ -212,6 +244,7 @@ ${simId === 'simple-pendulum' ? `
 *   **深景仿真搭建**：建议在上方导航栏【互动实验台】中选择对应模块（如匀变速直线运动、平抛运动或酸碱反应）进行三维交互教学。
 
 *(下方已为您挂载通用的阻尼摆球测试环境，供您观察经典简谐衰减过程。)*`;
+      }
     }
 
     // Stream the content character by character
@@ -444,7 +477,7 @@ ${simId === 'simple-pendulum' ? `
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             AI 模型引擎就绪
           </span>
-          <span>DeepSeek v3</span>
+          <span>DeepSeek v4-Flash</span>
         </div>
       </aside>
 
